@@ -10,6 +10,7 @@ namespace MyWebDbApp.Data;
 public class AppDbContext : IdentityDbContext<AppUser>
 {
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<Department> Departments {get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -20,40 +21,42 @@ public class AppDbContext : IdentityDbContext<AppUser>
     {
         base.OnModelCreating(builder);
 
-        PasswordHasher<AppUser> hasher = new PasswordHasher<AppUser>();
-        AppUser user = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };
-        user.NormalizedUserName = user.UserName.ToUpper();
-        user.PasswordHash = hasher.HashPassword(user, "Admin*123");
-        builder.Entity<AppUser>().HasData(user);
+    PasswordHasher<AppUser> hasher = new PasswordHasher<AppUser>();
 
-        IdentityRole role = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Administrator" };
-        role.NormalizedName = role.Name.ToUpper();
-        builder.Entity<IdentityRole>().HasData(role);
+    // Seed Admin User
+    AppUser adminUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };
+    adminUser.NormalizedUserName = adminUser.UserName.ToUpper();
+    adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin*123");
+    builder.Entity<AppUser>().HasData(adminUser);
 
-        IdentityUserRole<string> ur = new IdentityUserRole<string>() { UserId = user.Id, RoleId = role.Id };
-        builder.Entity<IdentityUserRole<string>>().HasData(ur);
+    // Seed Office Users
+    AppUser officeUser1 = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "office1@abc.com" };
+    officeUser1.NormalizedUserName = officeUser1.UserName.ToUpper();
+    officeUser1.PasswordHash = hasher.HashPassword(officeUser1, "Office*123");
+    builder.Entity<AppUser>().HasData(officeUser1);
 
+    AppUser officeUser2 = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "office2@abc.com" };
+    officeUser2.NormalizedUserName = officeUser2.UserName.ToUpper();
+    officeUser2.PasswordHash = hasher.HashPassword(officeUser2, "Office*123");
+    builder.Entity<AppUser>().HasData(officeUser2);
 
-        string[] Vornamen = new string[] { "Anton", "Berta", "Christian", "Daniela", "Egon", "Franziska" };
-        string[] Nachnamen = new string[] { "Alpha", "Beta", "Delta", "Epsilon", "Gamma", "Omega" };
-        Random rnd = new Random();
+    // Seed Roles
+    IdentityRole adminRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Administrator" };
+    adminRole.NormalizedName = adminRole.Name.ToUpper();
+    builder.Entity<IdentityRole>().HasData(adminRole);
 
-        for (int i = 0; i < 123; i++)
-        {
-            string vn = Vornamen[rnd.Next(Vornamen.Length)];
-            string nn = Nachnamen[rnd.Next(Nachnamen.Length)];
-            int share = rnd.Next(100);
+    IdentityRole officeRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Office" };
+    officeRole.NormalizedName = officeRole.Name.ToUpper();
+    builder.Entity<IdentityRole>().HasData(officeRole);
 
-            builder.Entity<Customer>().HasData(new Customer()
-            {
-                Id = i + 1,
-                Name = vn + " " + nn,
-                EMail = vn.ToLower() + "." + nn.ToLower() + "@uni-wuerzburg.de",
-                Gender = i % 2 == 0 ? Customer.GenderType.Male : Customer.GenderType.Female,
-                Birthday = new DateTime(rnd.Next(1950, 2000), rnd.Next(12) + 1, rnd.Next(28) + 1),
-                ShareStocks = share,
-                ShareBonds = 100 - share
-            });
-        }
+    // Assign Roles to Users
+    IdentityUserRole<string> adminUserRole = new IdentityUserRole<string>() { UserId = adminUser.Id, RoleId = adminRole.Id };
+    builder.Entity<IdentityUserRole<string>>().HasData(adminUserRole);
+
+    IdentityUserRole<string> officeUserRole1 = new IdentityUserRole<string>() { UserId = officeUser1.Id, RoleId = officeRole.Id };
+    builder.Entity<IdentityUserRole<string>>().HasData(officeUserRole1);
+
+    IdentityUserRole<string> officeUserRole2 = new IdentityUserRole<string>() { UserId = officeUser2.Id, RoleId = officeRole.Id };
+    builder.Entity<IdentityUserRole<string>>().HasData(officeUserRole2);
     }
 }
