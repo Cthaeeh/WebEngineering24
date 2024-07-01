@@ -1,0 +1,5 @@
+bin/
+obj/
+MyDatabase.db
+appsettings.Development.json
+MyWebDbApp.csproj.user
