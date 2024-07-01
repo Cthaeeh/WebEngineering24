@@ -1,0 +1,91 @@
+﻿@model MyWebDbApp.Models.Customer
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Customer</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="EMail" class="form-label"></label>
+                <input asp-for="EMail" class="form-control" />
+                <span asp-validation-for="EMail" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Birthday" class="form-label"></label>
+                <input asp-for="Birthday" class="form-control" />
+                <span asp-validation-for="Birthday" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ShareStocks" class="form-label"></label>
+                <input asp-for="ShareStocks" class="form-control" style="width: 60%" value="50" />
+                <span asp-validation-for="ShareStocks" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ShareBonds" class="form-label"></label>
+                <input asp-for="ShareBonds" class="form-control" style="width: 60%" value="50" />
+                <span asp-validation-for="ShareBonds" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Gender" class="form-label"></label>
+                <select asp-for="Gender" asp-items="@Html.GetEnumSelectList<Customer.GenderType>()" class="form-control"></select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/kendo/Content/kendo/2022.3.1109/kendo.bootstrap-main.min.css" />
+    <script src="~/lib/kendo/Scripts/kendo/2022.3.1109/kendo.ui.core.min.js"></script>
+
+    <script>
+        function stocksChange() {
+            $("#ShareBonds").getKendoSlider().value(100 - $("#ShareStocks").getKendoSlider().value());
+        }
+
+        function bondsChange() {
+            $("#ShareStocks").getKendoSlider().value(100 - $("#ShareBonds").getKendoSlider().value());
+        }
+
+        $(document).ready(function () {
+            var sliderStocks = $("#ShareStocks").kendoSlider({
+                change: stocksChange,
+                min: 0,
+                max: 100,
+                smallStep: 5,
+                largeStep: 20
+            });
+
+            var sliderBonds = $("#ShareBonds").kendoSlider({
+                change: bondsChange,
+                min: 0,
+                max: 100,
+                smallStep: 5,
+                largeStep: 20
+            });
+        });
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

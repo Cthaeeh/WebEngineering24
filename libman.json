@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "unpkg",
+      "library": "kendo-ui-core@2022.3.1109",
+      "destination": "wwwroot/lib/kendo-ui-core/"
+    }
+  ]
+}
