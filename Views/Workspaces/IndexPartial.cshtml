@@ -1,0 +1,24 @@
+@model IEnumerable<MyWebDbApp.Models.Workspace>
+
+@foreach (var item in Model)
+{
+    <tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+    </td>
+    </tr>
+}
+
+@if ((bool)ViewData["More"])
+{
+    <tr id="LoadRow">
+    <td colspan="100%">
+        <button id="LoadButton" onclick="loadmore()" data-from="@ViewData["From"]" data-length="@ViewData["Length"]"
+            class="btn btn-primary">Load more...</button>
+    </td>
+</tr>
+}
