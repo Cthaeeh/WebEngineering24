@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MyWebDbApp.Data;
 using MyWebDbApp.Models;
+using Microsoft.AspNetCore.Identity;
+using MyWebDbApp.Areas.Identity.Data;
 
 namespace MyWebDbApp.Controllers
 {
@@ -12,10 +13,12 @@ namespace MyWebDbApp.Controllers
     public class DepartmentsController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public DepartmentsController(AppDbContext context)
+        public DepartmentsController(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Departments
@@ -26,7 +29,7 @@ namespace MyWebDbApp.Controllers
             ViewData["From"] = length;
             ViewData["Length"] = length;
             ViewData["More"] = _context.Departments.Count() > length;
-            return View(await _context.Departments.Take(length).ToListAsync());
+            return View(await _context.Departments.Include(d => d.Chief).Take(length).ToListAsync());
         }
 
         // GET: Departments (PartialView)
@@ -36,30 +39,14 @@ namespace MyWebDbApp.Controllers
             ViewData["Length"] = length;
             ViewData["More"] = _context.Departments.Count() > from + length;
 
-            return PartialView("IndexPartial", await _context.Departments.Skip(from).Take(length).ToListAsync());
-        }
-
-        // GET: Departments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Departments == null)
-            {
-                return NotFound();
-            }
-
-            var department = await _context.Departments.FirstOrDefaultAsync(m => m.Id == id);
-            if (department == null)
-            {
-                return NotFound();
-            }
-
-            return View(department);
+            return PartialView("IndexPartial", await _context.Departments.Include(d => d.Chief).Skip(from).Take(length).ToListAsync());
         }
 
         // GET: Departments/Create
-        [Authorize(Roles="Administrator")]
+        [Authorize(Roles = "Administrator, Office")]
         public IActionResult Create()
         {
+            ViewData["Users"] = _userManager.Users.ToList();
             return View();
         }
 
@@ -68,18 +55,44 @@ namespace MyWebDbApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,EMail,Birthday,Gender,ShareStocks,ShareBonds")] Department department)
+        public async Task<IActionResult> Create([Bind("Id,Name,ChiefId")] Department department)
         {
+            department.Chief = await _userManager.FindByIdAsync(department.ChiefId);
+            if (department.Chief == null)
+            {
+                Console.WriteLine("Chief cannot be null");
+            }
+            else
+            {
+                Console.WriteLine(department.Chief.UserName);
+                ModelState.Remove("Chief");
+            }
+
             if (ModelState.IsValid)
             {
+                Console.WriteLine("we actually got here." + department.Name + "  " + department.ChiefId);
                 _context.Add(department);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(department);
+            else
+            {
+                Console.WriteLine("Model is not valid");
+                foreach (var modelState in ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        // Log the error or inspect the message
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+                ViewData["Users"] = _userManager.Users.ToList();
+                return View(department);
+            }
         }
 
         // GET: Department/Edit/5
+        [Authorize(Roles = "Administrator, Office")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -92,6 +105,7 @@ namespace MyWebDbApp.Controllers
             {
                 return NotFound();
             }
+            ViewData["Users"] = _userManager.Users.ToList();
             return View(department);
         }
 
@@ -100,11 +114,21 @@ namespace MyWebDbApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,EMail,Birthday,Gender,ShareStocks,ShareBonds")] Department department)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ChiefId")] Department department)
         {
             if (id != department.Id)
             {
                 return NotFound();
+            }
+            department.Chief = await _userManager.FindByIdAsync(department.ChiefId);
+            if (department.Chief == null)
+            {
+                Console.WriteLine("Chief cannot be null");
+            }
+            else
+            {
+                Console.WriteLine(department.Chief.UserName);
+                ModelState.Remove("Chief");
             }
 
             if (ModelState.IsValid)
@@ -127,10 +151,12 @@ namespace MyWebDbApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["Users"] = _userManager.Users.ToList();
             return View(department);
         }
 
         // GET: Departments/Delete/5
+        [Authorize(Roles = "Administrator, Office")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Departments == null)
@@ -162,14 +188,14 @@ namespace MyWebDbApp.Controllers
             {
                 _context.Departments.Remove(department);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DepartmentExists(int id)
         {
-          return _context.Departments.Any(e => e.Id == id);
+            return _context.Departments.Any(e => e.Id == id);
         }
     }
 }

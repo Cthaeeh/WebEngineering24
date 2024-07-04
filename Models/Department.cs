@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using MyWebDbApp.Areas.Identity.Data;
 
 namespace MyWebDbApp.Models
 {
@@ -10,7 +12,12 @@ namespace MyWebDbApp.Models
         [MinLength(2, ErrorMessage = "A name must have a length of at least 2 characters.")]
         public string Name { get; set; }
         
-        // TODO, needs additional field Chief.
+
+        [Required]
+        public string ChiefId { get; set; }
+
+        [ForeignKey("ChiefId")]
+        public AppUser Chief { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
