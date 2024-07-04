@@ -1,0 +1,39 @@
+@model IEnumerable<MyWebDbApp.Models.Workspace>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Workspaces</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>TODO</th>
+        </tr>
+    </thead>
+    <tbody>
+        @await Html.PartialAsync("IndexPartial", Model, ViewData)
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        function loadmore() {
+            $.get("@Url.Action("GetWorkspaces")", {
+                from: $("#LoadButton").attr("data-from"),
+                length: $("#LoadButton").attr("data-length"),
+            },
+                function (data, status, jq) {
+                    $("#LoadRow").replaceWith(data);
+                })
+        };
+    </script>
+}
