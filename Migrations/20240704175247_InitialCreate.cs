@@ -67,19 +67,6 @@ namespace MyWebDbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Departments",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -185,45 +172,65 @@ namespace MyWebDbApp.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "0a7330ef-595b-45be-a323-f5b6a8207c7c", "b12c6db7-b015-4ca0-8eff-3bccce9d09eb", "Administrator", "ADMINISTRATOR" });
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    ChiefId = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Departments_AspNetUsers_ChiefId",
+                        column: x => x.ChiefId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "693a63bb-9914-494d-a74e-5c1c7a2d2e3c", "06a4c0bd-9df5-409b-b545-988a8e8fa452", "Office", "OFFICE" });
+                values: new object[] { "073c29a4-5018-41e5-9540-744ec84aae1d", "844fbb61-3388-425c-a5f5-6e6e00878e45", "Administrator", "ADMINISTRATOR" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "88597f6a-f16a-4afc-a40e-c923365bd981", "555c2aa3-0cf5-41d6-9c37-99b66df99771", "Office", "OFFICE" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1d1074e9-4d28-41e6-8680-591cdbcfae0e", 0, "ebd09115-105e-433c-884d-e0eca01fe2bf", null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAEAACcQAAAAEJU3UNm3wagsGY5iXH2FfHHehQVUZ2n0e92Q6twegywgl7G3ssg7MRUcTyHiXNv+yQ==", null, false, "3bae1221-ed0a-48a6-82d5-bdcd7129a8ec", false, "office1@abc.com" });
+                values: new object[] { "3c48ac10-64d3-461b-b0ec-30ee74a08462", 0, "84958966-4b7b-41e4-badf-30dce86aa362", null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAEAACcQAAAAEDZidACadxJpgOKSW5L1lrkQCglWEzuB6wh9iuN7eqmfFM/91ZI0oVBfx149K8yE7g==", null, false, "8f308c99-0558-471f-84e6-b99b0572ed4d", false, "admin@abc.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "7a9e3840-210b-4522-b0bf-7082be0ef415", 0, "7297a572-9f14-4265-b7f3-c234bc8b426f", null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAEAACcQAAAAEH92tTZm1VsSCJ6oBcwpZvItreqi9x7xbHIWmq5vq3v+6IvzEyrsCqbGwJqQYu/OiQ==", null, false, "091b23ad-056c-43c2-b473-bd2e65b3b843", false, "admin@abc.com" });
+                values: new object[] { "531374fc-28e6-4e42-b487-75126bb69b5d", 0, "e30405ce-e17a-470f-93e2-07ff63a3d7d3", null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAEAACcQAAAAEAE2ZbVONQWXOsK57cyK5pRRQWqLQaeyB1LvblUbhANJeAXRc8PASgFYEA4rEgjJmg==", null, false, "b49ee35e-50b1-4f4d-a77d-22bcf4386c3a", false, "office1@abc.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "981e73f8-2ed3-4e7a-afe1-9e308c1ff0e8", 0, "2e7b482a-b566-4a14-bcfb-841197abb993", null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAEAACcQAAAAEJIWgaEbmVmorGOLPBT9rqqoR+ykgJzIMOBEbrfb5aTfrd7F71fV+fmeeUXJ6g9oGg==", null, false, "9879d659-7a5c-415b-927f-252caad150de", false, "office2@abc.com" });
+                values: new object[] { "77eda814-4f1d-4538-81ef-a189d1558f86", 0, "ee75c076-053a-453f-a7cc-480c67f78ca2", null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAEAACcQAAAAEAWJf/0IBT7Yg8Ih/dwRoveoD9T3joESGBVoz1aM9b7E1G+2ZzELC5mcFqlP5FII8g==", null, false, "1187f362-8058-4214-bf85-ef6cc75fc21a", false, "office2@abc.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "693a63bb-9914-494d-a74e-5c1c7a2d2e3c", "1d1074e9-4d28-41e6-8680-591cdbcfae0e" });
+                values: new object[] { "073c29a4-5018-41e5-9540-744ec84aae1d", "3c48ac10-64d3-461b-b0ec-30ee74a08462" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "0a7330ef-595b-45be-a323-f5b6a8207c7c", "7a9e3840-210b-4522-b0bf-7082be0ef415" });
+                values: new object[] { "88597f6a-f16a-4afc-a40e-c923365bd981", "531374fc-28e6-4e42-b487-75126bb69b5d" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "693a63bb-9914-494d-a74e-5c1c7a2d2e3c", "981e73f8-2ed3-4e7a-afe1-9e308c1ff0e8" });
+                values: new object[] { "88597f6a-f16a-4afc-a40e-c923365bd981", "77eda814-4f1d-4538-81ef-a189d1558f86" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -261,6 +268,11 @@ namespace MyWebDbApp.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_ChiefId",
+                table: "Departments",
+                column: "ChiefId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

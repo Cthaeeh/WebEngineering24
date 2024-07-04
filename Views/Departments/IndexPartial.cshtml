@@ -3,12 +3,21 @@
 @foreach (var item in Model)
 {
     <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @if (item.Chief != null)
+            {
+                @Html.DisplayFor(modelItem => item.Chief.UserName)
+            }
+            else
+            {
+                <span>Chief is null</span>
+            }
         </td>
         <td>
             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
             <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
         </td>
     </tr>
@@ -17,8 +26,9 @@
 @if ((bool)ViewData["More"])
 {
     <tr id="LoadRow">
-        <td colspan="100%">
-            <button id="LoadButton" onclick="loadmore()" data-from="@ViewData["From"]" data-length="@ViewData["Length"]" class="btn btn-primary">Load more...</button>
-        </td>
-    </tr>
+    <td colspan="100%">
+        <button id="LoadButton" onclick="loadmore()" data-from="@ViewData["From"]" data-length="@ViewData["Length"]"
+            class="btn btn-primary">Load more...</button>
+    </td>
+</tr>
 }
