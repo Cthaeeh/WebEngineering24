@@ -27,7 +27,10 @@ namespace MyWebDbApp.Controllers
             ViewData["From"] = length;
             ViewData["Length"] = length;
             ViewData["More"] = _context.Workspaces.Count() > length;
-            return View(await _context.Workspaces.Take(length).ToListAsync());
+            return View(await _context.Workspaces.Include(w => w.Room)
+                                                 .Include(w => w.Equipment)
+                                                 .Take(length)
+                                                 .ToListAsync());
         }
 
         // GET: Workspaces (PartialView)
@@ -37,13 +40,17 @@ namespace MyWebDbApp.Controllers
             ViewData["Length"] = length;
             ViewData["More"] = _context.Workspaces.Count() > from + length;
 
-            return PartialView("IndexPartial", await _context.Workspaces.Skip(from).Take(length).ToListAsync());
+            return PartialView("IndexPartial", await _context.Workspaces.Include(w => w.Room)
+                                                                        .Include(w => w.Equipment)
+                                                                        .Skip(from)
+                                                                        .Take(length).ToListAsync());
         }
 
         // GET: Workspaces/Create
         [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
+            ViewData["Rooms"] = _context.Rooms.ToList();
             return View();
         }
 
@@ -52,12 +59,30 @@ namespace MyWebDbApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Workspace workspace)
+        public async Task<IActionResult> Create([Bind("Name,RoomId")] Workspace workspace, string equipmentList)
         {
-
+            workspace.Room = await _context.Rooms.FindAsync(workspace.RoomId);
+            if (workspace.Room == null)
+            {
+                Console.WriteLine("Room cannot be null");
+            }
+            else
+            {
+                Console.WriteLine(workspace.Room.Name);
+                ModelState.Remove("Room");
+            }
             if (ModelState.IsValid)
             {
+                if (!string.IsNullOrEmpty(equipmentList))
+                {
+                    var equipmentNames = equipmentList.Split(',').Select(e => e.Trim());
+                    foreach (var equipmentName in equipmentNames)
+                    {
+                        workspace.Equipment.Add(new Equipment { Name = equipmentName });
+                    }
+                }
                 _context.Add(workspace);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -72,6 +97,7 @@ namespace MyWebDbApp.Controllers
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
+                ViewData["Rooms"] = _context.Rooms.ToList();
                 return View(workspace);
             }
         }
@@ -85,11 +111,12 @@ namespace MyWebDbApp.Controllers
                 return NotFound();
             }
 
-            var workspace = await _context.Workspaces.FindAsync(id);
+            var workspace = await _context.Workspaces.Include(w => w.Equipment).FirstOrDefaultAsync(m => m.Id == id);
             if (workspace == null)
             {
                 return NotFound();
             }
+            ViewData["Rooms"] = _context.Rooms.ToList();
             return View(workspace);
         }
 
@@ -98,14 +125,36 @@ namespace MyWebDbApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Workspace workspace)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,RoomId")] Workspace workspace, string equipmentList)
         {
             if (id != workspace.Id)
             {
                 return NotFound();
             }
+            workspace.Room = await _context.Rooms.FindAsync(workspace.RoomId);
+            if (workspace.Room == null)
+            {
+                Console.WriteLine("Room cannot be null");
+            }
+            else
+            {
+                Console.WriteLine(workspace.Room.Name);
+                ModelState.Remove("Room");
+            }
+
             if (ModelState.IsValid)
             {
+                var existingEquipment = _context.Equipment.Where(e => e.WorkspaceId == id);
+                _context.Equipment.RemoveRange(existingEquipment);
+                workspace.Equipment.Clear();
+                if (!string.IsNullOrEmpty(equipmentList))
+                {
+                    var equipmentNames = equipmentList.Split(',').Select(e => e.Trim());
+                    foreach (var equipmentName in equipmentNames)
+                    {
+                        workspace.Equipment.Add(new Equipment { Name = equipmentName });
+                    }
+                }
                 try
                 {
                     _context.Update(workspace);
@@ -124,6 +173,8 @@ namespace MyWebDbApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewData["Rooms"] = _context.Rooms.ToList();
             return View(workspace);
         }
 

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyWebDbApp.Models
 {
@@ -14,7 +13,9 @@ namespace MyWebDbApp.Models
 
         public int RoomId { get; set; }
 
-        // TODO, add Ausstattung
+        public Room Room { get; set; }  // Add this navigation property
+
+        public ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
         
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

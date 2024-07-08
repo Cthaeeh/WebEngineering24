@@ -1,0 +1,48 @@
+@model MyWebDbApp.Models.Workspace
+@using MyWebDbApp.Areas.Identity.Data
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Workspace</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="RoomId" class="form-label"></label>
+                <select asp-for="RoomId" class="form-control" asp-items="@(new SelectList(ViewData["Rooms"] as List<MyWebDbApp.Models.Room>, "Id", "Name"))">
+                    <option value="">-- Select Room --</option>
+                </select>
+                <span asp-validation-for="RoomId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="equipmentList" class="form-label">Equipment</label>
+                <input type="text" id="equipmentList" name="equipmentList" class="form-control" value="" placeholder="Separate items with commas" />
+                <span asp-validation-for="Equipment" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
