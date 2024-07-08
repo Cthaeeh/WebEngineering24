@@ -13,7 +13,7 @@ namespace MyWebDbApp.Models
         public string Name { get; set; }
         
 
-        [Required]
+        [Required(ErrorMessage = "Chief is required.")]
         public string ChiefId { get; set; }
 
         [ForeignKey("ChiefId")]

@@ -1,5 +1,8 @@
 bin/
 obj/
 MyDatabase.db
+MyDatabase.db-shm
+MyDatabase.db-wal
 appsettings.Development.json
 MyWebDbApp.csproj.user
+
