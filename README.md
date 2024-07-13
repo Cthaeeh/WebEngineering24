@@ -1,4 +1,4 @@
-# WebEnginnering24
+# WebEngineering24
 
 Linux:
 ```bash
