@@ -4,7 +4,7 @@ using MyWebDbApp.Areas.Identity.Data;
 
 namespace MyWebDbApp.Models
 {
-    public class Department : IValidatableObject
+    public class Department
     {
 
         public int Id { get; set; }
@@ -19,11 +19,6 @@ namespace MyWebDbApp.Models
         [ForeignKey("ChiefId")]
         public AppUser Chief { get; set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            var results = new List<ValidationResult>();
-
-            return results;
-        }
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

@@ -17,6 +17,8 @@ namespace MyWebDbApp.Models
 
         public ICollection<Equipment> Equipment { get; set; } = new List<Equipment>();
         
+        public ICollection<Occupancy> Occupancies { get; set; }
+        
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             var results = new List<ValidationResult>();
