@@ -8,11 +8,12 @@ namespace MyWebDbApp.Data;
 
 public class AppDbContext : IdentityDbContext<AppUser>
 {
-    public DbSet<Customer> Customers { get; set; }
     public DbSet<Department> Departments { get; set; }
     public DbSet<Workspace> Workspaces { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Equipment> Equipment { get; set; }
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Occupancy> Occupancies { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -25,6 +26,12 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         PasswordHasher<AppUser> hasher = new PasswordHasher<AppUser>();
 
+        builder.Entity<Employee>()
+            .HasOne(e => e.Department)
+            .WithMany(d => d.Employees)
+            .HasForeignKey(e => e.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.Entity<Workspace>()
             .HasOne(w => w.Room)
             .WithMany(r => r.Workspaces)
@@ -35,6 +42,13 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .HasOne(e => e.Workspace)
             .WithMany(w => w.Equipment)
             .HasForeignKey(e => e.WorkspaceId);
+
+        builder.Entity<Occupancy>()
+            .HasOne(o => o.Workspace)
+            .WithMany(w => w.Occupancies)
+            .HasForeignKey(o => o.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
 
         // Seed Admin User
         AppUser adminUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };
@@ -111,5 +125,26 @@ public class AppDbContext : IdentityDbContext<AppUser>
     }
 
     builder.Entity<Equipment>().HasData(equipmentList);
+
+    // Seeding data for Employees
+        string[] vorname = new string[] { "Anton", "Bernd", "Clara", "Dieter", "Eva", "Friedrich", "Greta", "Heinz", "Ingrid", "Johann" };
+        string[] nachname = new string[] { "Meier", "Schmidt", "Fischer", "Weber", "Müller", "Bauer", "Richter", "Koch", "Wagner", "Becker" };
+        Random rnd = new Random();
+
+        for (int i = 0; i < 123; i++)
+        {
+            string vn = vorname[rnd.Next(vorname.Length)];
+            string nn = nachname[rnd.Next(nachname.Length)];
+            int departmentId = rnd.Next(1, 6); // Assuming there are 5 departments
+
+            builder.Entity<Employee>().HasData(new Employee
+            {
+                Id = i + 1,
+                Name = vn + " " + nn,
+                DepartmentId = departmentId
+            });
+        }
     }
+
+    
 }
