@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Reflection.Emit;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyWebDbApp.Areas.Identity.Data;
@@ -67,6 +68,16 @@ public class AppDbContext : IdentityDbContext<AppUser>
         officeUser2.PasswordHash = hasher.HashPassword(officeUser2, "Office*123");
         builder.Entity<AppUser>().HasData(officeUser2);
 
+        AppUser mitarbeiterUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "worker@abc.com" };
+        mitarbeiterUser.NormalizedUserName = mitarbeiterUser.UserName.ToUpper();
+        mitarbeiterUser.PasswordHash = hasher.HashPassword(mitarbeiterUser, "Worker*123");
+        builder.Entity<AppUser>().HasData(mitarbeiterUser);
+
+        AppUser abteilungsleiterUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "chief@abc.com" };
+        abteilungsleiterUser.NormalizedUserName = abteilungsleiterUser.UserName.ToUpper();
+        abteilungsleiterUser.PasswordHash = hasher.HashPassword(abteilungsleiterUser, "Chief*123");
+       builder.Entity<AppUser>().HasData(abteilungsleiterUser);
+
         // Seed Roles
         IdentityRole adminRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Administrator" };
         adminRole.NormalizedName = adminRole.Name.ToUpper();
@@ -75,6 +86,14 @@ public class AppDbContext : IdentityDbContext<AppUser>
         IdentityRole officeRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Office" };
         officeRole.NormalizedName = officeRole.Name.ToUpper();
         builder.Entity<IdentityRole>().HasData(officeRole);
+
+        IdentityRole mitarbeiterRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Worker" };
+        mitarbeiterRole.NormalizedName = mitarbeiterRole.Name.ToUpper();
+        builder.Entity<IdentityRole>().HasData(mitarbeiterRole);
+
+        IdentityRole abteilungsleiterRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Chief" };
+        abteilungsleiterRole.NormalizedName = abteilungsleiterRole.Name.ToUpper();
+        builder.Entity<IdentityRole>().HasData(abteilungsleiterRole);
 
         // Assign Roles to Users
         IdentityUserRole<string> adminUserRole = new IdentityUserRole<string>() { UserId = adminUser.Id, RoleId = adminRole.Id };
@@ -85,6 +104,12 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         IdentityUserRole<string> officeUserRole2 = new IdentityUserRole<string>() { UserId = officeUser2.Id, RoleId = officeRole.Id };
         builder.Entity<IdentityUserRole<string>>().HasData(officeUserRole2);
+
+        IdentityUserRole<string> mitarbeiterUserRole = new IdentityUserRole<string> { UserId = mitarbeiterUser.Id, RoleId = mitarbeiterRole.Id };
+        builder.Entity<IdentityUserRole<string>>().HasData(mitarbeiterUserRole);
+
+        IdentityUserRole<string> abteilungsleiterUserRole = new IdentityUserRole<string> { UserId = abteilungsleiterUser.Id, RoleId = abteilungsleiterRole.Id };
+        builder.Entity<IdentityUserRole<string>>().HasData(abteilungsleiterUserRole);
 
         var rooms = new List<Room>
     {
