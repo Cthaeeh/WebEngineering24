@@ -3,16 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MyWebDbApp</title>
+    <title>@ViewData["Title"] - Deskbuddy</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MyWebDbApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Deskbuddy.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MyWebDbApp</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Deskbuddy</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,16 +23,22 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Occupancies" asp-action="Index">Occupancies</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Analysis" asp-action="Index">Belegungsplan</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Employees" asp-action="Index">Mitarbeiter</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Departments" asp-action="Index">Departments</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Rooms" asp-action="Index">Räumlichkeiten</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Workspaces" asp-action="Index">Workspaces</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workspaces" asp-action="Index">Arbeitsplätze</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Departments" asp-action="Index">Abteilungen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="RoomUtilizationViewModel" asp-action="Index">Auslastungsanalyse</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
