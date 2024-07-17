@@ -1,0 +1,27 @@
+﻿@model WeeklyOccupancyViewModel
+
+<h2>Occupancy Plan for Week @Model.WeekStartDate.ToString("dd.MM.yyyy") - @Model.WeekEndDate.ToString("dd.MM.yyyy")</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Room</th>
+            <th>Employee</th>
+            <th>Features</th>
+            <!-- Add other columns as needed -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var occupancy in Model.Occupancies)
+        {
+            <tr>
+                <td>@occupancy.Date.ToString("dd.MM.yyyy")</td>
+                <td>@occupancy.Workplace?.Room.Name</td>
+                <td>@(occupancy.Employee != null ? occupancy.Employee.Name : "Free to book")</td>
+                <td>@occupancy.Features</td>
+                <!-- Add other columns as needed -->
+            </tr>
+        }
+    </tbody>
+</table>
