@@ -44,11 +44,10 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .HasForeignKey(e => e.WorkspaceId);
 
         builder.Entity<Occupancy>()
-            .HasOne(o => o.Workspace)
+            .HasOne(o => o.Room)
             .WithMany(w => w.Occupancies)
-            .HasForeignKey(o => o.WorkspaceId)
-            .OnDelete(DeleteBehavior.Cascade);
-
+            .HasForeignKey(o => o.RoomId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Seed Admin User
         AppUser adminUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };

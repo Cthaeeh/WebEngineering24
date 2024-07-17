@@ -21,5 +21,7 @@ namespace MyWebDbApp.Models
         public RoomType Type { get; set; } = RoomType.Regular;
     
         public ICollection<Workspace> Workspaces { get; set; }
+
+        public ICollection<Occupancy> Occupancies { get; set; }
     }
 }
