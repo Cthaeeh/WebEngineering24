@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Identity;
 using MyWebDbApp.Areas.Identity.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 
 namespace Deskbuddy.Controllers
 {
-    [Authorize(Roles ="Office, Chief, Worker,Administrator")]
+    [Authorize(Roles = "Office, Chief, Worker,Administrator")]
     public class OccupanciesController : Controller
     {
         private readonly AppDbContext _context;
@@ -30,7 +31,7 @@ namespace Deskbuddy.Controllers
         // GET: Occupancies
         public async Task<IActionResult> Index()
         {
-            var deskbuddyContext = _context.Occupancies.Include(o => o.Employee).Include(o => o.Room).Include(o =>o.Workspace);
+            var deskbuddyContext = _context.Occupancies.Include(o => o.Employee).Include(o => o.Room).Include(o => o.Workspace);
             return View(await deskbuddyContext.ToListAsync());
         }
 
@@ -72,9 +73,6 @@ namespace Deskbuddy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,WorkspaceId,EmployeeId,Date")] Occupancy occupancy)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            occupancy.UserId = currentUser.Id;
-
             // Find the workspace by its ID and get the associated RoomId
             var workspace = await _context.Workspaces
                                            .Include(w => w.Room)  // Include Room in the query to avoid multiple database calls
@@ -93,6 +91,12 @@ namespace Deskbuddy.Controllers
             else
             {
                 ModelState.AddModelError("WorkspaceId", "Invalid Workspace ID");
+            }
+
+            // Check if the workspace is already occupied on the specified date
+            if (await IsWorkspaceOccupiedAsync(occupancy.WorkspaceId, occupancy.Date))
+            {
+                return CustomForbid("This workspace is already occupied on the specified date.");
             }
 
             if (ModelState.IsValid)
@@ -118,7 +122,7 @@ namespace Deskbuddy.Controllers
 
             return View(occupancy);
         }
-        [Authorize(Roles ="Office, Worker")]
+        [Authorize(Roles = "Office, Worker")]
         // GET: Occupancies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -138,7 +142,7 @@ namespace Deskbuddy.Controllers
             if (User.IsInRole("Worker"))
             {
                 // Check if the current user can edit the specified occupancy
-                if (occupancy.UserId != currentUser.Id)
+                if (occupancy.EmployeeId != currentUser.Id)
                 {
                     // If the current user is not allowed to edit this occupancy, return an unauthorized view or handle accordingly
                     return Forbid();
@@ -181,9 +185,15 @@ namespace Deskbuddy.Controllers
 
             var currentUser = await _userManager.GetUserAsync(User);
 
-            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
+            if (User.IsInRole("Worker") && occupancy.EmployeeId != currentUser.Id)
             {
                 return Forbid();
+            }
+
+            // Check if the workspace is already occupied on the specified date
+            if (await IsWorkspaceOccupiedAsync(occupancy.WorkspaceId, occupancy.Date))
+            {
+                return CustomForbid("This workspace is already occupied on the specified date.");
             }
 
             if (ModelState.IsValid)
@@ -231,7 +241,7 @@ namespace Deskbuddy.Controllers
             }
             var currentUser = await _userManager.GetUserAsync(User);
 
-            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
+            if (User.IsInRole("Worker") && occupancy.EmployeeId != currentUser.Id)
             {
                 return Forbid();
             }
@@ -242,7 +252,7 @@ namespace Deskbuddy.Controllers
         // POST: Occupancies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles ="Office, Worker")]
+        [Authorize(Roles = "Office, Worker")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var occupancy = await _context.Occupancies.FindAsync(id);
@@ -253,7 +263,7 @@ namespace Deskbuddy.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
+            if (User.IsInRole("Worker") && occupancy.EmployeeId != currentUser.Id)
             {
                 return Forbid();
             }
@@ -291,5 +301,23 @@ namespace Deskbuddy.Controllers
 
             return View("WeeklyOccupancy", viewModel);
         }
+
+        private async Task<bool> IsWorkspaceOccupiedAsync(int? workspaceId, DateTime date)
+        {
+            var existingOccupancy = await _context.Occupancies
+                                                  .FirstOrDefaultAsync(o => o.WorkspaceId == workspaceId && o.Date == date);
+            return existingOccupancy != null;
+        }
+
+        private IActionResult CustomForbid(string message)
+        {
+            return new ContentResult
+            {
+                Content = message,
+                ContentType = "text/plain",
+                StatusCode = (int)HttpStatusCode.Forbidden
+            };
+        }
     }
+
 }
