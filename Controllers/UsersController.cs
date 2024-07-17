@@ -60,7 +60,6 @@ namespace MyWebDbApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserName,DepartmentId")] AppUser user)
         {
-            Console. WriteLine("write user with name to db:" +  user.UserName);
             if (ModelState.IsValid)
             {
                 _context.Add(user);
@@ -99,8 +98,6 @@ namespace MyWebDbApp.Controllers
             {
                 return NotFound();
             }
-
-            Console. WriteLine("write user with name to db:" +  user.UserName);
 
             if (ModelState.IsValid)
             {
