@@ -152,4 +152,5 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
     builder.Entity<Equipment>().HasData(equipmentList);
     }
+
 }
