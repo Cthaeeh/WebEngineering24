@@ -56,10 +56,9 @@ namespace Deskbuddy.Controllers
 
         // GET: Occupancies/Create
         [Authorize(Roles = "Office, Worker, Administrator")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name");
+            ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name");
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type");
             return View();
@@ -88,7 +87,7 @@ namespace Deskbuddy.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
+            ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
@@ -120,7 +119,7 @@ namespace Deskbuddy.Controllers
                 }
             }
 
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
+            ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
@@ -172,7 +171,7 @@ namespace Deskbuddy.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
+            ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);

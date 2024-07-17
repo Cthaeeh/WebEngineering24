@@ -11,8 +11,8 @@ using MyWebDbApp.Data;
 namespace MyWebDbApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240717151059_init")]
-    partial class init
+    [Migration("20240717163726_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,25 +48,25 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a69da0c6-ec2e-49e5-a43b-6d1cdbecabd2",
+                            Id = "eb227aa5-658f-4d1b-bcea-d5338d68f9c9",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "2997520f-cb8f-4fe4-8ca7-598bc3f75df5",
+                            Id = "49b478bd-9ee6-42f1-8cbb-0923cba9ac42",
                             Name = "Office",
                             NormalizedName = "OFFICE"
                         },
                         new
                         {
-                            Id = "f8465195-b244-4b4a-af57-6ce0d627c5aa",
+                            Id = "239074ba-0164-4b80-8526-17e1d56b892f",
                             Name = "Worker",
                             NormalizedName = "WORKER"
                         },
                         new
                         {
-                            Id = "23c828e9-5b14-412d-be42-2e57bebb13bb",
+                            Id = "80f41492-3d55-4744-8f7b-61d5c940a9db",
                             Name = "Chief",
                             NormalizedName = "CHIEF"
                         });
@@ -159,28 +159,28 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "d1bba3cc-ebe2-4f3a-8a70-2fbc8e77ebcc",
-                            RoleId = "a69da0c6-ec2e-49e5-a43b-6d1cdbecabd2"
+                            UserId = "77fc46c1-383d-44ee-8a31-c85acf20c811",
+                            RoleId = "eb227aa5-658f-4d1b-bcea-d5338d68f9c9"
                         },
                         new
                         {
-                            UserId = "aa409c3d-2797-462c-92f8-e8113df9b881",
-                            RoleId = "2997520f-cb8f-4fe4-8ca7-598bc3f75df5"
+                            UserId = "d28e32a2-e920-4667-829e-c3af3b5c2669",
+                            RoleId = "49b478bd-9ee6-42f1-8cbb-0923cba9ac42"
                         },
                         new
                         {
-                            UserId = "69a936a7-9a3d-43d3-8258-63594bcc0737",
-                            RoleId = "2997520f-cb8f-4fe4-8ca7-598bc3f75df5"
+                            UserId = "af086b82-923f-450d-b20b-7bb21b164f34",
+                            RoleId = "49b478bd-9ee6-42f1-8cbb-0923cba9ac42"
                         },
                         new
                         {
-                            UserId = "376103cd-0145-4731-a47c-2d23eb67b992",
-                            RoleId = "f8465195-b244-4b4a-af57-6ce0d627c5aa"
+                            UserId = "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72",
+                            RoleId = "239074ba-0164-4b80-8526-17e1d56b892f"
                         },
                         new
                         {
-                            UserId = "0161bd27-482f-4612-aed7-6c9299460881",
-                            RoleId = "23c828e9-5b14-412d-be42-2e57bebb13bb"
+                            UserId = "29f445e3-c72e-4cd1-950d-961c495095a3",
+                            RoleId = "80f41492-3d55-4744-8f7b-61d5c940a9db"
                         });
                 });
 
@@ -216,6 +216,9 @@ namespace MyWebDbApp.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("DepartmentId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -259,6 +262,8 @@ namespace MyWebDbApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -271,71 +276,71 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d1bba3cc-ebe2-4f3a-8a70-2fbc8e77ebcc",
+                            Id = "77fc46c1-383d-44ee-8a31-c85acf20c811",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b513cf09-b4bf-4e64-be7a-743c66af0e2b",
+                            ConcurrencyStamp = "3f55fd4e-49ef-4f23-baed-2a77e937c426",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDCsAeHGnw8W+VSYkA/55drCPbCUNfWMu3nrDGGexwuSR/FT4zDC7ny9byJ/2eD+Gg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOdp0X5ua0wJxECYQqtOD/m75tcItsNW4YuHnKiewhZvdVfibnRouVIFpl63BkavWw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "425f3c71-1697-4b11-aa62-7cf55b950da1",
+                            SecurityStamp = "fb20e840-c639-415f-a389-57824416c590",
                             TwoFactorEnabled = false,
                             UserName = "admin@abc.com"
                         },
                         new
                         {
-                            Id = "aa409c3d-2797-462c-92f8-e8113df9b881",
+                            Id = "d28e32a2-e920-4667-829e-c3af3b5c2669",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "03f011d1-508c-4b31-95ec-5b06fdf00b59",
+                            ConcurrencyStamp = "dfebbde6-96e1-44b1-99e6-c33d9bc07b5a",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "OFFICE1@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH0CWbhT2bWVOT8niLCeXGXlBO32YhtDoJGkb51X/oY9a3JIiZ1TMjf+Z5/ti55XBw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEF8eus+P25LMHy+9UW3YIujHQViBHs0M/sBPt+VJdQJ6bmXWBmz8zgU6AP0AiLLFWQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c75f0450-cc6d-4c95-9db4-0d62a00c3d0b",
+                            SecurityStamp = "9fb64a2c-3bf8-4d5f-a010-8746d4df16b7",
                             TwoFactorEnabled = false,
                             UserName = "office1@abc.com"
                         },
                         new
                         {
-                            Id = "69a936a7-9a3d-43d3-8258-63594bcc0737",
+                            Id = "af086b82-923f-450d-b20b-7bb21b164f34",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b71b7720-579d-41d0-9ea4-2b53e4b47efb",
+                            ConcurrencyStamp = "23bf58b9-9150-4b43-acd7-d1e0076b3e09",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "OFFICE2@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPrVL6SMHT+yoMhtWWVy2srWWf6XdfWFSmg1JfigB+eXDF6MuGE7rQAe/E3ksvFvmg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPJo/Wsd6ww2c4OCl0gf8h4lyKlgHleEQT6yn6RoktYDIMyohuFKvpu5JDICODTAWw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3029225d-faf1-4028-8c15-067d6d32ceb9",
+                            SecurityStamp = "68561ea9-96b6-4e57-813d-b9066d7f2acd",
                             TwoFactorEnabled = false,
                             UserName = "office2@abc.com"
                         },
                         new
                         {
-                            Id = "376103cd-0145-4731-a47c-2d23eb67b992",
+                            Id = "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fe02532e-e3c3-4835-b055-a19e4284574c",
+                            ConcurrencyStamp = "3c3ba316-6e42-47bc-bf1b-748a55b5e029",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "WORKER@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEBhbtN/b/ikPdAX4CtsWm8up8TnNQzbIJaHQts16X/+x8hRnAix7mR8rMs5806w7g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN9byP4OeOOCfFJG8vigKUquCYynqQWLKBvxeQSWC4wpx6J8gWBBH3Sl8oZU9js/yw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "85f448b3-f48e-4654-a204-b5e2d64c773f",
+                            SecurityStamp = "74767078-3196-4593-a891-8c112ef17d92",
                             TwoFactorEnabled = false,
                             UserName = "worker@abc.com"
                         },
                         new
                         {
-                            Id = "0161bd27-482f-4612-aed7-6c9299460881",
+                            Id = "29f445e3-c72e-4cd1-950d-961c495095a3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f943d8f8-6e94-4478-a515-f70800349c11",
+                            ConcurrencyStamp = "9f7d29a1-7b1f-45f2-b379-8698bbd72022",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "CHIEF@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBlSMfuVo+1W3mqVE9erubVSrjjgapm90iMX1dpgCO4z0rsCSgtnCguI8jYqVXU2lA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDEQdpwpUK+zwo7EIZfWCB9ZXtGdO1fVenBukkttMT6EVrWBgGZx8wkhxZUXnV/nAA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2436c5db-4f17-4093-8b76-e2373a6573ee",
+                            SecurityStamp = "7d87362f-6c95-41d9-a539-05e9e47ccb6e",
                             TwoFactorEnabled = false,
                             UserName = "chief@abc.com"
                         });
@@ -360,26 +365,6 @@ namespace MyWebDbApp.Migrations
                     b.HasIndex("ChiefId");
 
                     b.ToTable("Departments");
-                });
-
-            modelBuilder.Entity("MyWebDbApp.Models.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("MyWebDbApp.Models.Equipment", b =>
@@ -773,8 +758,8 @@ namespace MyWebDbApp.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("RoomId")
                         .HasColumnType("INTEGER");
@@ -1137,6 +1122,16 @@ namespace MyWebDbApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyWebDbApp.Areas.Identity.Data.AppUser", b =>
+                {
+                    b.HasOne("MyWebDbApp.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Department");
+                });
+
             modelBuilder.Entity("MyWebDbApp.Models.Department", b =>
                 {
                     b.HasOne("MyWebDbApp.Areas.Identity.Data.AppUser", "Chief")
@@ -1146,17 +1141,6 @@ namespace MyWebDbApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Chief");
-                });
-
-            modelBuilder.Entity("MyWebDbApp.Models.Employee", b =>
-                {
-                    b.HasOne("MyWebDbApp.Models.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("MyWebDbApp.Models.Equipment", b =>
@@ -1172,7 +1156,7 @@ namespace MyWebDbApp.Migrations
 
             modelBuilder.Entity("MyWebDbApp.Models.Occupancy", b =>
                 {
-                    b.HasOne("MyWebDbApp.Models.Employee", "Employee")
+                    b.HasOne("MyWebDbApp.Areas.Identity.Data.AppUser", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 

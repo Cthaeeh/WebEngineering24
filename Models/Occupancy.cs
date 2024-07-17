@@ -8,7 +8,7 @@ namespace MyWebDbApp.Models
     {
         public int Id { get; set; }
         public int RoomId { get; set; }  
-        public int? EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
         public string? UserId { get; set; }
 
         [DataType(DataType.Date)]
@@ -16,7 +16,7 @@ namespace MyWebDbApp.Models
         // Navigation properties
         public Room? Room { get; set; }
 
-        public Employee? Employee { get; set; }
+        public AppUser? Employee { get; set; }
         public AppUser? User { get; set; }   
     }
 

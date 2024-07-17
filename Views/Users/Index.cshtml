@@ -1,10 +1,11 @@
-﻿@model IEnumerable<MyWebDbApp.Models.Employee>
+﻿@using MyWebDbApp.Areas.Identity.Data
+@model IEnumerable<AppUser>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Employee</h1>
+<h1>Users</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Department)
@@ -25,10 +26,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Department.Name)
+                @(item.Department != null ? item.Department.Name : "Department not set")
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
