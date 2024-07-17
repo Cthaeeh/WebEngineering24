@@ -5,22 +5,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Deskbuddy.Data;
-using Deskbuddy.Models;
+using MyWebDbApp.Data;
+using MyWebDbApp.Models;
 using Microsoft.AspNetCore.Identity;
-using Deskbuddy.Areas.Identity.Data;
+using MyWebDbApp.Areas.Identity.Data;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Deskbuddy.Models;
 
 namespace Deskbuddy.Controllers
 {
     [Authorize(Roles ="Sekretariat, Abteilungsleiter, Mitarbeiter")]
     public class OccupanciesController : Controller
     {
-        private readonly DeskbuddyContext _context;
-        private readonly UserManager<DeskbuddyUser> _userManager;
+        private readonly AppDbContext _context;
+        private readonly UserManager<AppUser> _userManager;
 
-        public OccupanciesController(DeskbuddyContext context, UserManager<DeskbuddyUser> userManager)
+        public OccupanciesController(AppDbContext context, UserManager<AppUser> userManager)
         {
             _context = context;
             _userManager = userManager;
