@@ -1,5 +1,6 @@
 ﻿@using MyWebDbApp.Areas.Identity.Data
-@model AppUser
+@using Microsoft.AspNetCore.Identity
+@model CreateUserViewModel
 
 @{
     ViewData["Title"] = "Create User";
@@ -11,16 +12,28 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
                 <label asp-for="UserName" class="form-label"></label>
-                <input asp-for="UserName" class="form-control" />
+                <input asp-for="UserName" class="form-control" type="email"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Role</label>
+                <select asp-for="RoleId" class="form-control" asp-items="@(new SelectList(ViewData["Roles"] as List<IdentityRole>, "Id", "Name"))" id="roleDropdown" onchange="toggleDepartment()">
+                    <option value="">-- Select Role --</option>
+                </select>
+                <span asp-validation-for="RoleId" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
                 <label asp-for="DepartmentId" class="form-label"></label>
-                <select asp-for="DepartmentId" class="form-control" asp-items="@(new SelectList(ViewData["Departments"] as List<Department>, "Id", "Name"))">
+                <select asp-for="DepartmentId" class="form-control" asp-items="@(new SelectList(ViewData["Departments"] as List<Department>, "Id", "Name"))" id="departmentDropdown" disabled>
                     <option value="">-- Select Department --</option>
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
@@ -37,5 +50,19 @@
 </div>
 
 @section Scripts {
+    <script>
+        function toggleDepartment() {
+            var roleDropdown = document.getElementById('roleDropdown');
+            var departmentDropdown = document.getElementById('departmentDropdown');
+            var selectedRole = roleDropdown.options[roleDropdown.selectedIndex].text;
+
+            if (selectedRole === "Worker") {
+                departmentDropdown.disabled = false;
+            } else {
+                departmentDropdown.disabled = true;
+                departmentDropdown.selectedIndex = 0; // Reset to the default option
+            }
+        }
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -8,17 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using MyWebDbApp.Areas.Identity.Data;
 using MyWebDbApp.Data;
 using Microsoft.AspNetCore.Authorization;
+using MyWebDbApp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyWebDbApp.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public UsersController(AppDbContext context)
+        public UsersController(AppDbContext context, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         // GET: Employees
@@ -51,24 +57,43 @@ namespace MyWebDbApp.Controllers
         public IActionResult Create()
         {
             ViewData["Departments"] = _context.Departments.ToList();
+            ViewData["Roles"] = _roleManager.Roles.ToList();;
             return View();
         }
 
-        // POST: Employees/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,DepartmentId")] AppUser user)
+        public async Task<IActionResult> Create(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Create the new user
+            var appUser = new AppUser
+            {
+                UserName = model.UserName,
+                DepartmentId = model.DepartmentId
+                // Add other properties if needed
+            };
+            var result = await _userManager.CreateAsync(appUser, model.Password); // Use a default password or prompt for it
+            if (result.Succeeded)
+            {
+                // Assign the role to the user
+                var role = await _roleManager.FindByIdAsync(model.RoleId.ToString());
+                if (role != null)
+                {
+                    await _userManager.AddToRoleAsync(appUser, role.Name);
+                }
+
+                return RedirectToAction("Index");
             }
-            ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name", user.DepartmentId);
-            return View(user);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            }
+            ViewData["Departments"] = _context.Departments.ToList();
+            ViewData["Roles"] = _roleManager.Roles.ToList();;
+            return View(model);
         }
 
         // GET: Employees/Edit/5
