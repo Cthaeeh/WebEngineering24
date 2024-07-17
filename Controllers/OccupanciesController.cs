@@ -304,6 +304,8 @@ namespace Deskbuddy.Controllers
 
         private async Task<bool> IsWorkspaceOccupiedAsync(int? workspaceId, DateTime date)
         {
+            if (workspaceId != null && workspaceId < 0)
+                return false;
             var existingOccupancy = await _context.Occupancies
                                                   .FirstOrDefaultAsync(o => o.WorkspaceId == workspaceId && o.Date == date);
             return existingOccupancy != null;

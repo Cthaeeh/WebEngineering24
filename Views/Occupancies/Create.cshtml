@@ -13,14 +13,14 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div class="mb-3">
-                <label asp-for="WorkspaceId" class="form-label"></label>
+                <label asp-for="Workspace" class="form-label"></label>
                 <select asp-for="WorkspaceId" class="form-control" asp-items="@(new SelectList(ViewData["Workspaces"] as List<MyWebDbApp.Models.Workspace>, "Id", "Name"))">
                     <option value="">-- Select Workspace --</option>
                 </select>
                 <span asp-validation-for="WorkspaceId" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="EmployeeId" class="form-label"></label>
+                <label asp-for="Employee" class="form-label"></label>
                 <select asp-for="EmployeeId" class="form-control" asp-items="@(new SelectList(ViewData["Employees"] as List<AppUser>, "Id", "UserName"))">
                     <option value="">-- Select Employee --</option>
                 </select>

@@ -223,9 +223,9 @@ namespace MyWebDbApp.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     EmployeeId = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true),
                     WorkspaceId = table.Column<int>(type: "INTEGER", nullable: true),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UserId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -259,10 +259,10 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "221a65de-c71e-4bcf-932d-49ab7f2bf02d", null, "Worker", "WORKER" },
-                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", null, "Office", "OFFICE" },
-                    { "797bc835-e8f8-4291-8454-ab45837ae3f8", null, "Chief", "CHIEF" },
-                    { "98fb4750-cca1-4709-99e9-63db9ba5c3c4", null, "Administrator", "ADMINISTRATOR" }
+                    { "315b548b-a22c-4311-bec5-5fbdfa930fc1", null, "Chief", "CHIEF" },
+                    { "6c9a01f7-38c5-43c6-9478-d23a49838d51", null, "Worker", "WORKER" },
+                    { "a406977c-27dc-459d-9a85-671338a3b997", null, "Office", "OFFICE" },
+                    { "c93eda02-f1b9-4693-b25b-509d4d70080f", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -270,11 +270,11 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1604edb9-6815-40e2-8d39-b96c1684ceaa", 0, "75c820dd-279f-436d-a22c-80aeb58fa1fa", null, null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAECi5MKZ3t2i5N6+dpQx8d/gNTzlgnwwjyoXnYKUlRRGu359akAmvG81GAatTw3+kEw==", null, false, "74bdae4e-195d-4f61-a7e0-43823c64cfce", false, "chief@abc.com" },
-                    { "1b18e2bf-7382-4d39-8ba0-a8b7f5e20602", 0, "99b79b1a-d789-4a3c-84be-ce52a5ef27b7", null, null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEH2fMI/laUBgepo7pOlqffRJi+e1XP9imRuFojiUCfEKpo1bW2J2Q1lPLg9dm7IUZw==", null, false, "2154ebac-fd58-416b-bc85-ebffcbce1e11", false, "worker@abc.com" },
-                    { "2602532d-1340-4bd3-ab45-8ee2e541790a", 0, "ee22f530-4c41-4ff9-99d4-a71cd5e506f8", null, null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEE0tuGv4hECFXbTxZNsJw7yl3d2Va9AFvn/Rp1tqN9IWQeLm1brLzZz47cbZDrFyJw==", null, false, "87e0d6df-3e58-4337-8908-75246007ce0a", false, "office2@abc.com" },
-                    { "64fd2479-a472-4df0-bc13-e2aabb2290e2", 0, "1dc7fb04-15d7-41e9-b66b-c4ee299da565", null, null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAECbTI1OUZSvQV3y/4bYIkWY4L1AlVWEDGcuFBXXruHAGolPX5FM6LE13zdL/9K00lg==", null, false, "beccfe70-1d0b-42bc-8adb-9e499742d2d6", false, "admin@abc.com" },
-                    { "975bbfab-239f-466c-b380-6001f3bc3f8e", 0, "12efaed6-2c87-4e5c-93b6-b760f9e16022", null, null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAEAs5FBH+ohe6CC+OLQH+oZuThzicc5xWyPoKp5J1tuBVFON1yozrywh5uVIASd05Og==", null, false, "12e01eae-749b-407d-a9dc-aa71b3109439", false, "office1@abc.com" }
+                    { "13961a53-edc5-4cda-a059-4a23cc8d89c9", 0, "7f0b73a1-5da2-4afc-9656-43cc63ab94e8", null, null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAEDbQX98ysFxxNb4mBY9cB5CxZsiLNbxYggaaKk23RhgVQOOJbs6OGC77n7hXHlVwGg==", null, false, "7cb599b8-a56b-45d8-b188-a278230d6429", false, "chief@abc.com" },
+                    { "2347f193-f788-406d-920d-50be54893154", 0, "3c719898-6a3b-485c-86bd-1c20487f7e3b", null, null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEKAM03sLQ/+I1/OBj6oyO699hw97Z6fIOPPsi9HVw/2ldXb+ofCVy+yxFXJWMBBNRw==", null, false, "464d8e4b-2bf6-4601-8ecb-53a9eab75d70", false, "office2@abc.com" },
+                    { "a55afed9-27fe-471e-b414-354cb6000ad4", 0, "2bbbb48e-b1ea-48b1-94ab-799736e9e072", null, null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAELqu4uJ3Ezpwf8/GCpeJjQT5ToQlIcN1PgBf9jj5ZCKuyESwV27y0WLzS5OA4BdzMA==", null, false, "ceea76cc-2ebe-4a2b-ae9f-b00b0094cbf5", false, "admin@abc.com" },
+                    { "a707fce9-8fdc-4f43-8026-cd1806b6febd", 0, "093fb70d-1bb0-4077-a76c-51483fd77a2e", null, null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEPH+iZBh9ouHQXZBxlowu4gm10fliGI3wB/aYxWbD2m4oF9w1R52aNn2umF/AgQ6hQ==", null, false, "4aa98df9-5e97-41f6-9149-992046babdef", false, "worker@abc.com" },
+                    { "b6ebf5bc-e950-431e-8f96-767cc4c517cc", 0, "e88ae57f-8b93-4d92-8f5e-3082b83ba537", null, null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAELcDdk6SrMwVLr2uUlnt4IPA6U492iUgtFkbc55yu5en6GK5HcVBIE75R5j3mCgZOA==", null, false, "0bb6299b-3a39-4c94-a14d-252bd031d2e3", false, "office1@abc.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -282,7 +282,7 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "Name", "Type" },
                 values: new object[,]
                 {
-                    { 1, "Room 1", 0 },
+                    { 1, "HomeOffice-Room", 0 },
                     { 2, "Room 2", 5 },
                     { 3, "Room 3", 2 },
                     { 4, "Room 4", 3 },
@@ -300,11 +300,11 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "797bc835-e8f8-4291-8454-ab45837ae3f8", "1604edb9-6815-40e2-8d39-b96c1684ceaa" },
-                    { "221a65de-c71e-4bcf-932d-49ab7f2bf02d", "1b18e2bf-7382-4d39-8ba0-a8b7f5e20602" },
-                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", "2602532d-1340-4bd3-ab45-8ee2e541790a" },
-                    { "98fb4750-cca1-4709-99e9-63db9ba5c3c4", "64fd2479-a472-4df0-bc13-e2aabb2290e2" },
-                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", "975bbfab-239f-466c-b380-6001f3bc3f8e" }
+                    { "315b548b-a22c-4311-bec5-5fbdfa930fc1", "13961a53-edc5-4cda-a059-4a23cc8d89c9" },
+                    { "a406977c-27dc-459d-9a85-671338a3b997", "2347f193-f788-406d-920d-50be54893154" },
+                    { "c93eda02-f1b9-4693-b25b-509d4d70080f", "a55afed9-27fe-471e-b414-354cb6000ad4" },
+                    { "6c9a01f7-38c5-43c6-9478-d23a49838d51", "a707fce9-8fdc-4f43-8026-cd1806b6febd" },
+                    { "a406977c-27dc-459d-9a85-671338a3b997", "b6ebf5bc-e950-431e-8f96-767cc4c517cc" }
                 });
 
             migrationBuilder.InsertData(
@@ -312,6 +312,7 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "Name", "RoomId" },
                 values: new object[,]
                 {
+                    { -1, "HomeOffice", 1 },
                     { 1, "Workspace 1", 2 },
                     { 2, "Workspace 2", 3 },
                     { 3, "Workspace 3", 4 },

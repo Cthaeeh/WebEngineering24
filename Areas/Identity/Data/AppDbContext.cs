@@ -81,7 +81,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
         AppUser abteilungsleiterUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "chief@abc.com" };
         abteilungsleiterUser.NormalizedUserName = abteilungsleiterUser.UserName.ToUpper();
         abteilungsleiterUser.PasswordHash = hasher.HashPassword(abteilungsleiterUser, "Chief*123");
-       builder.Entity<AppUser>().HasData(abteilungsleiterUser);
+        builder.Entity<AppUser>().HasData(abteilungsleiterUser);
 
         // Seed Roles
         IdentityRole adminRole = new IdentityRole() { Id = Guid.NewGuid().ToString(), Name = "Administrator" };
@@ -118,7 +118,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         var rooms = new List<Room>
     {
-        new Room { Id = 1, Name = "Room 1", Type = Room.RoomType.Regular },
+        new Room { Id = 1, Name = "HomeOffice-Room", Type = Room.RoomType.Regular },
         new Room { Id = 2, Name = "Room 2", Type = Room.RoomType.Laboratory },
         new Room { Id = 3, Name = "Room 3", Type = Room.RoomType.Kitchen },
         new Room { Id = 4, Name = "Room 4", Type = Room.RoomType.Assembly },
@@ -145,17 +145,24 @@ public class AppDbContext : IdentityDbContext<AppUser>
             });
         }
 
+        workspaces.Add(new Workspace
+        {
+            Id = -1,
+            Name = "HomeOffice",
+            RoomId = 1
+        });
+
         builder.Entity<Workspace>().HasData(workspaces);
 
         // Seed Equipment
-    var equipmentList = new List<Equipment>();
-    for (int i = 1; i <= 30; i++)
-    {
-        equipmentList.Add(new Equipment { Id = i, Name = "Desk", WorkspaceId = i });
-        equipmentList.Add(new Equipment { Id = i + 30, Name = "Chair", WorkspaceId = i });
-    }
+        var equipmentList = new List<Equipment>();
+        for (int i = 1; i <= 30; i++)
+        {
+            equipmentList.Add(new Equipment { Id = i, Name = "Desk", WorkspaceId = i });
+            equipmentList.Add(new Equipment { Id = i + 30, Name = "Chair", WorkspaceId = i });
+        }
 
-    builder.Entity<Equipment>().HasData(equipmentList);
+        builder.Entity<Equipment>().HasData(equipmentList);
     }
 
 }
