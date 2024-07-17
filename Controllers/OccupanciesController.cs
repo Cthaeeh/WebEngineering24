@@ -30,7 +30,7 @@ namespace Deskbuddy.Controllers
         // GET: Occupancies
         public async Task<IActionResult> Index()
         {
-            var deskbuddyContext = _context.Occupancies.Include(o => o.Employee).Include(o => o.Room);
+            var deskbuddyContext = _context.Occupancies.Include(o => o.Employee).Include(o => o.Room).Include(o =>o.Workspace);
             return View(await deskbuddyContext.ToListAsync());
         }
 
@@ -45,6 +45,7 @@ namespace Deskbuddy.Controllers
             var occupancy = await _context.Occupancies
                 .Include(o => o.Employee)
                 .Include(o => o.Room)
+                .Include(o => o.Workspace)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (occupancy == null)
             {
@@ -59,8 +60,8 @@ namespace Deskbuddy.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name");
-            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type");
+            ViewData["Workspaces"] = _context.Workspaces.ToList();
+
             return View();
         }
 
@@ -69,16 +70,29 @@ namespace Deskbuddy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoomId,EmployeeId,Date,Type")] Occupancy occupancy)
+        public async Task<IActionResult> Create([Bind("Id,WorkspaceId,EmployeeId,Date")] Occupancy occupancy)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             occupancy.UserId = currentUser.Id;
 
-            if (ModelState.IsValid)
+            // Find the workspace by its ID and get the associated RoomId
+            var workspace = await _context.Workspaces
+                                           .Include(w => w.Room)  // Include Room in the query to avoid multiple database calls
+                                           .FirstOrDefaultAsync(w => w.Id == occupancy.WorkspaceId);
+            if (workspace != null)
             {
-                _context.Add(occupancy);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                occupancy.RoomId = workspace.RoomId;
+                occupancy.Room = workspace.Room;  // Assign the Room from the workspace
+                occupancy.Workspace = workspace;
+
+                // Remove the validation for these properties if they are set manually
+                ModelState.Remove(nameof(occupancy.Workspace));
+                ModelState.Remove(nameof(occupancy.Room));
+                ModelState.Remove(nameof(occupancy.RoomId));
+            }
+            else
+            {
+                ModelState.AddModelError("WorkspaceId", "Invalid Workspace ID");
             }
 
             if (ModelState.IsValid)
@@ -87,9 +101,21 @@ namespace Deskbuddy.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // If model state is invalid, log errors and return the view with errors
+            Console.WriteLine("Model is not valid");
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+            }
+
             ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
-            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
+            ViewData["Workspaces"] = _context.Workspaces.ToList();
+            ViewData["Rooms"] = _context.Rooms.ToList();
+
             return View(occupancy);
         }
         [Authorize(Roles ="Office, Worker")]
@@ -119,9 +145,9 @@ namespace Deskbuddy.Controllers
                 }
             }
 
+
             ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
-            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
+            ViewData["Workspaces"] = _context.Workspaces.ToList();
             return View(occupancy);
         }
 
@@ -130,26 +156,35 @@ namespace Deskbuddy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoomId,EmployeeId,Date,Features")] Occupancy occupancy)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,WorkspaceId,EmployeeId,Date")] Occupancy occupancy)
         {
             if (id != occupancy.Id)
             {
                 return NotFound();
             }
 
-            var currentUser = await _userManager.GetUserAsync(User);
-            var existingOccupancy = await _context.Occupancies.FindAsync(id);
-
-            if (existingOccupancy == null)
+            // Find the workspace by its ID and get the associated RoomId
+            var workspace = await _context.Workspaces
+                                           .Include(w => w.Room)  // Include Room in the query to avoid multiple database calls
+                                           .FirstOrDefaultAsync(w => w.Id == occupancy.WorkspaceId);
+            if (workspace != null)
             {
-                return NotFound();
+                occupancy.RoomId = workspace.RoomId;
+                occupancy.Room = workspace.Room;  // Assign the Room from the workspace
+                occupancy.Workspace = workspace;
+
+                // Remove the validation for these properties if they are set manually
+                ModelState.Remove(nameof(occupancy.Workspace));
+                ModelState.Remove(nameof(occupancy.Room));
+                ModelState.Remove(nameof(occupancy.RoomId));
             }
 
-            if (User.IsInRole("Worker") && existingOccupancy.UserId != currentUser.Id)
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
             {
                 return Forbid();
             }
-
 
             if (ModelState.IsValid)
             {
@@ -172,8 +207,8 @@ namespace Deskbuddy.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Employees"] = await _userManager.GetUsersInRoleAsync("Worker");
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
-            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
+            ViewData["Workspaces"] = _context.Workspaces.ToList();
+            ViewData["Rooms"] = _context.Rooms.ToList();
             return View(occupancy);
         }
 

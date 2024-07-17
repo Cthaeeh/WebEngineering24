@@ -14,7 +14,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Room)
+                @Html.DisplayNameFor(model => model.Workspace)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Date)
@@ -24,7 +24,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Room.Type)
-            </th>
+            </th>   
             <th></th>
         </tr>
     </thead>
@@ -32,7 +32,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Room.Name)
+                @Html.DisplayFor(modelItem => item.Workspace.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Date)

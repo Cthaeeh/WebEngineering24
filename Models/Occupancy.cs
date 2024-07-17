@@ -11,11 +11,14 @@ namespace MyWebDbApp.Models
         public string? EmployeeId { get; set; }
         public string? UserId { get; set; }
 
+        public int? WorkspaceId { get; set; }
+
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         // Navigation properties
         public Room? Room { get; set; }
 
+        public Workspace Workspace { get; set; }
         public AppUser? Employee { get; set; }
         public AppUser? User { get; set; }   
     }
