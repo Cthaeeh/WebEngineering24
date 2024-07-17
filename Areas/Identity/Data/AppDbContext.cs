@@ -13,7 +13,6 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Workspace> Workspaces { get; set; }
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Employee> Employees { get; set; }
     public DbSet<Occupancy> Occupancies { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -27,7 +26,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         PasswordHasher<AppUser> hasher = new PasswordHasher<AppUser>();
 
-        builder.Entity<Employee>()
+        builder.Entity<AppUser>()
             .HasOne(e => e.Department)
             .WithMany(d => d.Employees)
             .HasForeignKey(e => e.DepartmentId)

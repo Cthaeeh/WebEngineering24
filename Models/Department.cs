@@ -19,6 +19,6 @@ namespace MyWebDbApp.Models
         [ForeignKey("ChiefId")]
         public AppUser Chief { get; set; }
 
-        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<AppUser> Employees { get; set; } = new List<AppUser>();
     }
 }

@@ -1,4 +1,5 @@
-﻿@model MyWebDbApp.Models.Employee
+﻿@using MyWebDbApp.Areas.Identity.Data
+@model AppUser
 
 @{
     ViewData["Title"] = "Create";
@@ -6,16 +7,16 @@
 
 <h1>Create</h1>
 
-<h4>Employee</h4>
+<h4>User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="UserName" class="form-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="DepartmentId" class="form-label"></label>

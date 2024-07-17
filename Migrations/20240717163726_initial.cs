@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyWebDbApp.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,31 +25,6 @@ namespace MyWebDbApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,6 +63,46 @@ namespace MyWebDbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Workspaces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Workspaces", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Workspaces_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Equipment",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    WorkspaceId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Equipment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Equipment_Workspaces_WorkspaceId",
+                        column: x => x.WorkspaceId,
+                        principalTable: "Workspaces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -100,12 +115,6 @@ namespace MyWebDbApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -120,12 +129,6 @@ namespace MyWebDbApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -144,12 +147,32 @@ namespace MyWebDbApp.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: true),
+                    UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "INTEGER", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "INTEGER", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,73 +216,13 @@ namespace MyWebDbApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Workspaces",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Workspaces", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Workspaces_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Employees",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    DepartmentId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Employees_Departments_DepartmentId",
-                        column: x => x.DepartmentId,
-                        principalTable: "Departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Equipment",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
-                    WorkspaceId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Equipment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Equipment_Workspaces_WorkspaceId",
-                        column: x => x.WorkspaceId,
-                        principalTable: "Workspaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Occupancies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false),
-                    EmployeeId = table.Column<int>(type: "INTEGER", nullable: true),
+                    EmployeeId = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     WorkspaceId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -268,14 +231,14 @@ namespace MyWebDbApp.Migrations
                 {
                     table.PrimaryKey("PK_Occupancies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Occupancies_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Occupancies_AspNetUsers_EmployeeId",
+                        column: x => x.EmployeeId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Occupancies_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_Occupancies_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Occupancies_Rooms_RoomId",
@@ -295,22 +258,22 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "23c828e9-5b14-412d-be42-2e57bebb13bb", null, "Chief", "CHIEF" },
-                    { "2997520f-cb8f-4fe4-8ca7-598bc3f75df5", null, "Office", "OFFICE" },
-                    { "a69da0c6-ec2e-49e5-a43b-6d1cdbecabd2", null, "Administrator", "ADMINISTRATOR" },
-                    { "f8465195-b244-4b4a-af57-6ce0d627c5aa", null, "Worker", "WORKER" }
+                    { "239074ba-0164-4b80-8526-17e1d56b892f", null, "Worker", "WORKER" },
+                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", null, "Office", "OFFICE" },
+                    { "80f41492-3d55-4744-8f7b-61d5c940a9db", null, "Chief", "CHIEF" },
+                    { "eb227aa5-658f-4d1b-bcea-d5338d68f9c9", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "0161bd27-482f-4612-aed7-6c9299460881", 0, "f943d8f8-6e94-4478-a515-f70800349c11", null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAEBlSMfuVo+1W3mqVE9erubVSrjjgapm90iMX1dpgCO4z0rsCSgtnCguI8jYqVXU2lA==", null, false, "2436c5db-4f17-4093-8b76-e2373a6573ee", false, "chief@abc.com" },
-                    { "376103cd-0145-4731-a47c-2d23eb67b992", 0, "fe02532e-e3c3-4835-b055-a19e4284574c", null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEEBhbtN/b/ikPdAX4CtsWm8up8TnNQzbIJaHQts16X/+x8hRnAix7mR8rMs5806w7g==", null, false, "85f448b3-f48e-4654-a204-b5e2d64c773f", false, "worker@abc.com" },
-                    { "69a936a7-9a3d-43d3-8258-63594bcc0737", 0, "b71b7720-579d-41d0-9ea4-2b53e4b47efb", null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEPrVL6SMHT+yoMhtWWVy2srWWf6XdfWFSmg1JfigB+eXDF6MuGE7rQAe/E3ksvFvmg==", null, false, "3029225d-faf1-4028-8c15-067d6d32ceb9", false, "office2@abc.com" },
-                    { "aa409c3d-2797-462c-92f8-e8113df9b881", 0, "03f011d1-508c-4b31-95ec-5b06fdf00b59", null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAEH0CWbhT2bWVOT8niLCeXGXlBO32YhtDoJGkb51X/oY9a3JIiZ1TMjf+Z5/ti55XBw==", null, false, "c75f0450-cc6d-4c95-9db4-0d62a00c3d0b", false, "office1@abc.com" },
-                    { "d1bba3cc-ebe2-4f3a-8a70-2fbc8e77ebcc", 0, "b513cf09-b4bf-4e64-be7a-743c66af0e2b", null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAEDCsAeHGnw8W+VSYkA/55drCPbCUNfWMu3nrDGGexwuSR/FT4zDC7ny9byJ/2eD+Gg==", null, false, "425f3c71-1697-4b11-aa62-7cf55b950da1", false, "admin@abc.com" }
+                    { "29f445e3-c72e-4cd1-950d-961c495095a3", 0, "9f7d29a1-7b1f-45f2-b379-8698bbd72022", null, null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAEDEQdpwpUK+zwo7EIZfWCB9ZXtGdO1fVenBukkttMT6EVrWBgGZx8wkhxZUXnV/nAA==", null, false, "7d87362f-6c95-41d9-a539-05e9e47ccb6e", false, "chief@abc.com" },
+                    { "77fc46c1-383d-44ee-8a31-c85acf20c811", 0, "3f55fd4e-49ef-4f23-baed-2a77e937c426", null, null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAEOdp0X5ua0wJxECYQqtOD/m75tcItsNW4YuHnKiewhZvdVfibnRouVIFpl63BkavWw==", null, false, "fb20e840-c639-415f-a389-57824416c590", false, "admin@abc.com" },
+                    { "af086b82-923f-450d-b20b-7bb21b164f34", 0, "23bf58b9-9150-4b43-acd7-d1e0076b3e09", null, null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEPJo/Wsd6ww2c4OCl0gf8h4lyKlgHleEQT6yn6RoktYDIMyohuFKvpu5JDICODTAWw==", null, false, "68561ea9-96b6-4e57-813d-b9066d7f2acd", false, "office2@abc.com" },
+                    { "d28e32a2-e920-4667-829e-c3af3b5c2669", 0, "dfebbde6-96e1-44b1-99e6-c33d9bc07b5a", null, null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAEF8eus+P25LMHy+9UW3YIujHQViBHs0M/sBPt+VJdQJ6bmXWBmz8zgU6AP0AiLLFWQ==", null, false, "9fb64a2c-3bf8-4d5f-a010-8746d4df16b7", false, "office1@abc.com" },
+                    { "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72", 0, "3c3ba316-6e42-47bc-bf1b-748a55b5e029", null, null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEN9byP4OeOOCfFJG8vigKUquCYynqQWLKBvxeQSWC4wpx6J8gWBBH3Sl8oZU9js/yw==", null, false, "74767078-3196-4593-a891-8c112ef17d92", false, "worker@abc.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -336,11 +299,11 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "23c828e9-5b14-412d-be42-2e57bebb13bb", "0161bd27-482f-4612-aed7-6c9299460881" },
-                    { "f8465195-b244-4b4a-af57-6ce0d627c5aa", "376103cd-0145-4731-a47c-2d23eb67b992" },
-                    { "2997520f-cb8f-4fe4-8ca7-598bc3f75df5", "69a936a7-9a3d-43d3-8258-63594bcc0737" },
-                    { "2997520f-cb8f-4fe4-8ca7-598bc3f75df5", "aa409c3d-2797-462c-92f8-e8113df9b881" },
-                    { "a69da0c6-ec2e-49e5-a43b-6d1cdbecabd2", "d1bba3cc-ebe2-4f3a-8a70-2fbc8e77ebcc" }
+                    { "80f41492-3d55-4744-8f7b-61d5c940a9db", "29f445e3-c72e-4cd1-950d-961c495095a3" },
+                    { "eb227aa5-658f-4d1b-bcea-d5338d68f9c9", "77fc46c1-383d-44ee-8a31-c85acf20c811" },
+                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", "af086b82-923f-450d-b20b-7bb21b164f34" },
+                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", "d28e32a2-e920-4667-829e-c3af3b5c2669" },
+                    { "239074ba-0164-4b80-8526-17e1d56b892f", "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72" }
                 });
 
             migrationBuilder.InsertData(
@@ -479,6 +442,11 @@ namespace MyWebDbApp.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_DepartmentId",
+                table: "AspNetUsers",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -488,11 +456,6 @@ namespace MyWebDbApp.Migrations
                 name: "IX_Departments_ChiefId",
                 table: "Departments",
                 column: "ChiefId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Employees_DepartmentId",
-                table: "Employees",
-                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Equipment_WorkspaceId",
@@ -523,11 +486,47 @@ namespace MyWebDbApp.Migrations
                 name: "IX_Workspaces_RoomId",
                 table: "Workspaces",
                 column: "RoomId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AspNetUsers_Departments_DepartmentId",
+                table: "AspNetUsers",
+                column: "DepartmentId",
+                principalTable: "Departments",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Departments_AspNetUsers_ChiefId",
+                table: "Departments");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -553,19 +552,16 @@ namespace MyWebDbApp.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Employees");
-
-            migrationBuilder.DropTable(
                 name: "Workspaces");
-
-            migrationBuilder.DropTable(
-                name: "Departments");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
         }
     }
 }

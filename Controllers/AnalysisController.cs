@@ -22,7 +22,7 @@ namespace MyWebDbApp.Controllers
                     Date = g.Key.Date,                    // Set Date from the group key
                     RoomId = g.Key.RoomId,                // Set RoomId from the group key
                     EmployeeCount = g.Count(),            // Count the total number of employees in the group
-                    OnSiteCount = g.Count(o => o.EmployeeId.HasValue),    // Count employees who are on site (EmployeeId is not null)
+                    OnSiteCount = g.Count(o => o.EmployeeId != null),    // Count employees who are on site (EmployeeId is not null)
                     HomeOfficeCount = g.Count(o => o.RoomId == 11) // Count employees working from home (EmployeeId is null)
                 })
                 .ToList();
