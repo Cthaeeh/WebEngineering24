@@ -3,7 +3,7 @@
 Linux:
 ```bash
 # We need some old dotnet-sdk
-sudo apt-get update && sudo apt-get install -y dotnet-sdk-6.0
+sudo apt-get update && sudo apt-get install -y dotnet-sdk-8.0
 # get deps set in MyWebDbApp.csproj
 dotnet restore 
 # build the project
