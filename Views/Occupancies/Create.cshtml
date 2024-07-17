@@ -12,10 +12,12 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
-                <label asp-for="Room" class="form-label"></label>
-                <select asp-for="RoomId" class ="form-control" asp-items="ViewBag.RoomId"></select>
+                <label asp-for="WorkspaceId" class="form-label"></label>
+                <select asp-for="WorkspaceId" class="form-control" asp-items="@(new SelectList(ViewData["Workspaces"] as List<MyWebDbApp.Models.Workspace>, "Id", "Name"))">
+                    <option value="">-- Select Workspace --</option>
+                </select>
+                <span asp-validation-for="WorkspaceId" class="text-danger"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="EmployeeId" class="form-label"></label>

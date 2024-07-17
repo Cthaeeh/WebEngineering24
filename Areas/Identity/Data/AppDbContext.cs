@@ -49,7 +49,13 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .WithMany(w => w.Occupancies)
             .HasForeignKey(o => o.RoomId)
             .OnDelete(DeleteBehavior.Restrict);
-            
+
+        builder.Entity<Occupancy>()
+        .HasOne(o => o.Workspace)
+        .WithMany(w => w.Occupancies)
+        .HasForeignKey(o => o.WorkspaceId)
+        .OnDelete(DeleteBehavior.Restrict);
+
         // Seed Admin User
         AppUser adminUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };
         adminUser.NormalizedUserName = adminUser.UserName.ToUpper();

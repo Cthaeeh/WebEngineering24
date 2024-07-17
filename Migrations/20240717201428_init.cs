@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyWebDbApp.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,8 +224,8 @@ namespace MyWebDbApp.Migrations
                     RoomId = table.Column<int>(type: "INTEGER", nullable: false),
                     EmployeeId = table.Column<string>(type: "TEXT", nullable: true),
                     UserId = table.Column<string>(type: "TEXT", nullable: true),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    WorkspaceId = table.Column<int>(type: "INTEGER", nullable: true)
+                    WorkspaceId = table.Column<int>(type: "INTEGER", nullable: true),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,7 +250,8 @@ namespace MyWebDbApp.Migrations
                         name: "FK_Occupancies_Workspaces_WorkspaceId",
                         column: x => x.WorkspaceId,
                         principalTable: "Workspaces",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -258,10 +259,10 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "239074ba-0164-4b80-8526-17e1d56b892f", null, "Worker", "WORKER" },
-                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", null, "Office", "OFFICE" },
-                    { "80f41492-3d55-4744-8f7b-61d5c940a9db", null, "Chief", "CHIEF" },
-                    { "eb227aa5-658f-4d1b-bcea-d5338d68f9c9", null, "Administrator", "ADMINISTRATOR" }
+                    { "221a65de-c71e-4bcf-932d-49ab7f2bf02d", null, "Worker", "WORKER" },
+                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", null, "Office", "OFFICE" },
+                    { "797bc835-e8f8-4291-8454-ab45837ae3f8", null, "Chief", "CHIEF" },
+                    { "98fb4750-cca1-4709-99e9-63db9ba5c3c4", null, "Administrator", "ADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -269,11 +270,11 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DepartmentId", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "29f445e3-c72e-4cd1-950d-961c495095a3", 0, "9f7d29a1-7b1f-45f2-b379-8698bbd72022", null, null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAEDEQdpwpUK+zwo7EIZfWCB9ZXtGdO1fVenBukkttMT6EVrWBgGZx8wkhxZUXnV/nAA==", null, false, "7d87362f-6c95-41d9-a539-05e9e47ccb6e", false, "chief@abc.com" },
-                    { "77fc46c1-383d-44ee-8a31-c85acf20c811", 0, "3f55fd4e-49ef-4f23-baed-2a77e937c426", null, null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAEOdp0X5ua0wJxECYQqtOD/m75tcItsNW4YuHnKiewhZvdVfibnRouVIFpl63BkavWw==", null, false, "fb20e840-c639-415f-a389-57824416c590", false, "admin@abc.com" },
-                    { "af086b82-923f-450d-b20b-7bb21b164f34", 0, "23bf58b9-9150-4b43-acd7-d1e0076b3e09", null, null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEPJo/Wsd6ww2c4OCl0gf8h4lyKlgHleEQT6yn6RoktYDIMyohuFKvpu5JDICODTAWw==", null, false, "68561ea9-96b6-4e57-813d-b9066d7f2acd", false, "office2@abc.com" },
-                    { "d28e32a2-e920-4667-829e-c3af3b5c2669", 0, "dfebbde6-96e1-44b1-99e6-c33d9bc07b5a", null, null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAEF8eus+P25LMHy+9UW3YIujHQViBHs0M/sBPt+VJdQJ6bmXWBmz8zgU6AP0AiLLFWQ==", null, false, "9fb64a2c-3bf8-4d5f-a010-8746d4df16b7", false, "office1@abc.com" },
-                    { "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72", 0, "3c3ba316-6e42-47bc-bf1b-748a55b5e029", null, null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEN9byP4OeOOCfFJG8vigKUquCYynqQWLKBvxeQSWC4wpx6J8gWBBH3Sl8oZU9js/yw==", null, false, "74767078-3196-4593-a891-8c112ef17d92", false, "worker@abc.com" }
+                    { "1604edb9-6815-40e2-8d39-b96c1684ceaa", 0, "75c820dd-279f-436d-a22c-80aeb58fa1fa", null, null, false, false, null, null, "CHIEF@ABC.COM", "AQAAAAIAAYagAAAAECi5MKZ3t2i5N6+dpQx8d/gNTzlgnwwjyoXnYKUlRRGu359akAmvG81GAatTw3+kEw==", null, false, "74bdae4e-195d-4f61-a7e0-43823c64cfce", false, "chief@abc.com" },
+                    { "1b18e2bf-7382-4d39-8ba0-a8b7f5e20602", 0, "99b79b1a-d789-4a3c-84be-ce52a5ef27b7", null, null, false, false, null, null, "WORKER@ABC.COM", "AQAAAAIAAYagAAAAEH2fMI/laUBgepo7pOlqffRJi+e1XP9imRuFojiUCfEKpo1bW2J2Q1lPLg9dm7IUZw==", null, false, "2154ebac-fd58-416b-bc85-ebffcbce1e11", false, "worker@abc.com" },
+                    { "2602532d-1340-4bd3-ab45-8ee2e541790a", 0, "ee22f530-4c41-4ff9-99d4-a71cd5e506f8", null, null, false, false, null, null, "OFFICE2@ABC.COM", "AQAAAAIAAYagAAAAEE0tuGv4hECFXbTxZNsJw7yl3d2Va9AFvn/Rp1tqN9IWQeLm1brLzZz47cbZDrFyJw==", null, false, "87e0d6df-3e58-4337-8908-75246007ce0a", false, "office2@abc.com" },
+                    { "64fd2479-a472-4df0-bc13-e2aabb2290e2", 0, "1dc7fb04-15d7-41e9-b66b-c4ee299da565", null, null, false, false, null, null, "ADMIN@ABC.COM", "AQAAAAIAAYagAAAAECbTI1OUZSvQV3y/4bYIkWY4L1AlVWEDGcuFBXXruHAGolPX5FM6LE13zdL/9K00lg==", null, false, "beccfe70-1d0b-42bc-8adb-9e499742d2d6", false, "admin@abc.com" },
+                    { "975bbfab-239f-466c-b380-6001f3bc3f8e", 0, "12efaed6-2c87-4e5c-93b6-b760f9e16022", null, null, false, false, null, null, "OFFICE1@ABC.COM", "AQAAAAIAAYagAAAAEAs5FBH+ohe6CC+OLQH+oZuThzicc5xWyPoKp5J1tuBVFON1yozrywh5uVIASd05Og==", null, false, "12e01eae-749b-407d-a9dc-aa71b3109439", false, "office1@abc.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -299,11 +300,11 @@ namespace MyWebDbApp.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "80f41492-3d55-4744-8f7b-61d5c940a9db", "29f445e3-c72e-4cd1-950d-961c495095a3" },
-                    { "eb227aa5-658f-4d1b-bcea-d5338d68f9c9", "77fc46c1-383d-44ee-8a31-c85acf20c811" },
-                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", "af086b82-923f-450d-b20b-7bb21b164f34" },
-                    { "49b478bd-9ee6-42f1-8cbb-0923cba9ac42", "d28e32a2-e920-4667-829e-c3af3b5c2669" },
-                    { "239074ba-0164-4b80-8526-17e1d56b892f", "d6f5a6eb-c19a-472e-88e6-7c68d2d6eb72" }
+                    { "797bc835-e8f8-4291-8454-ab45837ae3f8", "1604edb9-6815-40e2-8d39-b96c1684ceaa" },
+                    { "221a65de-c71e-4bcf-932d-49ab7f2bf02d", "1b18e2bf-7382-4d39-8ba0-a8b7f5e20602" },
+                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", "2602532d-1340-4bd3-ab45-8ee2e541790a" },
+                    { "98fb4750-cca1-4709-99e9-63db9ba5c3c4", "64fd2479-a472-4df0-bc13-e2aabb2290e2" },
+                    { "2c43c526-d5ea-4ff0-98b2-c4f9347b5189", "975bbfab-239f-466c-b380-6001f3bc3f8e" }
                 });
 
             migrationBuilder.InsertData(
