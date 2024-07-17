@@ -45,15 +45,27 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "b2e8331a-d9a7-44ec-b087-c8a566069173",
+                            Id = "defaf00d-ec55-4dbd-b6aa-db0b5f8c21cf",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
-                            Id = "1611d45f-610e-4097-9ce1-fd95f5b073d6",
+                            Id = "54549a05-4a44-4e26-b35a-c721f6449ce7",
                             Name = "Office",
                             NormalizedName = "OFFICE"
+                        },
+                        new
+                        {
+                            Id = "e69a50ee-4516-452f-bfc4-56a77857cb79",
+                            Name = "Worker",
+                            NormalizedName = "WORKER"
+                        },
+                        new
+                        {
+                            Id = "f7cbcac9-b72b-4811-b030-f87ce96ccb72",
+                            Name = "Chief",
+                            NormalizedName = "CHIEF"
                         });
                 });
 
@@ -144,18 +156,28 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "30a7141c-384b-4714-9d27-49ee3360694f",
-                            RoleId = "b2e8331a-d9a7-44ec-b087-c8a566069173"
+                            UserId = "5242b050-5828-4745-b328-969580b5297c",
+                            RoleId = "defaf00d-ec55-4dbd-b6aa-db0b5f8c21cf"
                         },
                         new
                         {
-                            UserId = "ddb4a216-a555-4ed1-971d-982ab176ef38",
-                            RoleId = "1611d45f-610e-4097-9ce1-fd95f5b073d6"
+                            UserId = "608f8222-bf54-4aff-8e0f-1847436f1b9a",
+                            RoleId = "54549a05-4a44-4e26-b35a-c721f6449ce7"
                         },
                         new
                         {
-                            UserId = "9674a3d3-4a71-4f83-a9a5-825d9c8e10d0",
-                            RoleId = "1611d45f-610e-4097-9ce1-fd95f5b073d6"
+                            UserId = "596622ba-fb8a-4562-9da0-279e5038438c",
+                            RoleId = "54549a05-4a44-4e26-b35a-c721f6449ce7"
+                        },
+                        new
+                        {
+                            UserId = "238d10fb-5797-4740-9daa-ef912edaea71",
+                            RoleId = "e69a50ee-4516-452f-bfc4-56a77857cb79"
+                        },
+                        new
+                        {
+                            UserId = "3cff055f-7215-41ce-8728-1b6bdeb1d993",
+                            RoleId = "f7cbcac9-b72b-4811-b030-f87ce96ccb72"
                         });
                 });
 
@@ -246,45 +268,73 @@ namespace MyWebDbApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "30a7141c-384b-4714-9d27-49ee3360694f",
+                            Id = "5242b050-5828-4745-b328-969580b5297c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "75c3f0da-697d-46af-9058-f841528b8266",
+                            ConcurrencyStamp = "68c921f2-f300-47a3-aa7c-a97ee0908d50",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKnL1zHma4apRVSeSfZA8KbGv90+OGq4KJI/YUC70bOlK74+EeSL9HEQ/EHUXoMxEQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJz8EyuR4BRIg+qspgyeDD+nJXAmScm4roOFNUBa19d3OM0OIBcrAorR8+jITRaCFw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4b5a5186-9298-4258-8006-f91699ac0730",
+                            SecurityStamp = "4b201c77-0bc4-4ede-8b93-9a4266104602",
                             TwoFactorEnabled = false,
                             UserName = "admin@abc.com"
                         },
                         new
                         {
-                            Id = "ddb4a216-a555-4ed1-971d-982ab176ef38",
+                            Id = "608f8222-bf54-4aff-8e0f-1847436f1b9a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "048586fd-87a2-4c0c-8517-f9e1ccca3c6e",
+                            ConcurrencyStamp = "51592267-b1ff-4033-8597-a5e996004ef0",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "OFFICE1@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKSYqgDJYDgFSc7aGv1TUO3nZDySsAjR6cQLQqQmkn+qbZGvUQQIyTnNYtl1/VUz7Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB9myKhrf3sYrskVQRWz6aNwjqbDuaxvPO3dGAChSop/LuPfp6soBn6w7P4HFqrkhg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c28c6847-bd98-4784-9c7b-7a875a95bea2",
+                            SecurityStamp = "9d20ecea-ceb0-4138-a745-00cb858eaa83",
                             TwoFactorEnabled = false,
                             UserName = "office1@abc.com"
                         },
                         new
                         {
-                            Id = "9674a3d3-4a71-4f83-a9a5-825d9c8e10d0",
+                            Id = "596622ba-fb8a-4562-9da0-279e5038438c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4ede312a-76a9-41ef-a07b-7afeabc2a1a5",
+                            ConcurrencyStamp = "9120de21-1f9c-494a-b796-d483c0507a45",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "OFFICE2@ABC.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAv9K+fq/BYPyA8SrFW7/D250FHbPPg4FVu4C24kQyitJU5IP9RtTuokYwx2tr2Tpg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELdG4EC+Yc9B+f/3HXjo5R9cI75q4hBOMQVmAPYNE9DQ3AfoUNKKVJ5p4zmxx6cqIA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5442d1c6-153c-4129-a51a-ef0ea7ed6402",
+                            SecurityStamp = "465c1c2c-60d9-4250-8af9-031eb6237ede",
                             TwoFactorEnabled = false,
                             UserName = "office2@abc.com"
+                        },
+                        new
+                        {
+                            Id = "238d10fb-5797-4740-9daa-ef912edaea71",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "41209bab-b50c-4a5c-b781-ccf43e390d44",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "WORKER@ABC.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAELV7uxhPCJ1l6nFKxtCbBje22rzQhbVWsYsa8SG/pWm9JTtlqP+4AgOnp2ljOLxPxQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f4cbe535-1982-42dd-b231-5f0075fe9749",
+                            TwoFactorEnabled = false,
+                            UserName = "worker@abc.com"
+                        },
+                        new
+                        {
+                            Id = "3cff055f-7215-41ce-8728-1b6bdeb1d993",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0ca8a13d-fcd9-4925-afaf-ba0e2fb32746",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "CHIEF@ABC.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJT/T5noTU7+zZO0uZKfZeThOv5bhijlYIPur3lihGcUvFOHmPu09Wnt0Ba2ck7eZQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "dbdeefc8-9772-4e1e-9bb7-f06ab616e8a0",
+                            TwoFactorEnabled = false,
+                            UserName = "chief@abc.com"
                         });
                 });
 
