@@ -44,9 +44,9 @@ namespace MyWebDbApp.Controllers
 
         // GET: Departments/Create
         [Authorize(Roles = "Administrator, Office")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["Users"] = _userManager.Users.ToList();
+            ViewData["Chiefs"] = await _userManager.GetUsersInRoleAsync("Chief");
             return View();
         }
 
@@ -86,7 +86,7 @@ namespace MyWebDbApp.Controllers
                         Console.WriteLine(error.ErrorMessage);
                     }
                 }
-                ViewData["Users"] = _userManager.Users.ToList();
+                ViewData["Chiefs"] = await _userManager.GetUsersInRoleAsync("Chief");
                 return View(department);
             }
         }
@@ -105,7 +105,7 @@ namespace MyWebDbApp.Controllers
             {
                 return NotFound();
             }
-            ViewData["Users"] = _userManager.Users.ToList();
+            ViewData["Chiefs"] = await _userManager.GetUsersInRoleAsync("Chief");
             return View(department);
         }
 
@@ -151,7 +151,7 @@ namespace MyWebDbApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["Users"] = _userManager.Users.ToList();
+            ViewData["Chiefs"] = await _userManager.GetUsersInRoleAsync("Chief");
             return View(department);
         }
 

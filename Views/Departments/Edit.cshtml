@@ -21,7 +21,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="ChiefId" class="form-label"></label>
-                <select asp-for="ChiefId" class="form-control" asp-items="@(new SelectList(ViewData["Users"] as List<AppUser>, "Id", "UserName"))">
+                <select asp-for="ChiefId" class="form-control" asp-items="@(new SelectList(ViewData["Chiefs"] as List<AppUser>, "Id", "UserName"))">
                     <option value="">-- Select Chief --</option>
                 </select>
                 <span asp-validation-for="ChiefId" class="text-danger"></span>
