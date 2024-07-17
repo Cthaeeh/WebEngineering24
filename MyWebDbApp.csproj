@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Views\Occupancies\Create.cshtml" />
+    <None Include="Views\Occupancies\Delete.cshtml" />
+    <None Include="Views\Occupancies\Details.cshtml" />
+    <None Include="Views\Occupancies\Edit.cshtml" />
+    <None Include="Views\Occupancies\Index.cshtml" />
+    <None Include="Views\Occupancies\WeeklyOccupancy.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="KendoUICore" Version="2022.3.1109" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.7" />

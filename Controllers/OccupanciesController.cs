@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Deskbuddy.Controllers
 {
-    [Authorize(Roles ="Sekretariat, Abteilungsleiter, Mitarbeiter")]
+    [Authorize(Roles ="Office, Abteilungsleiter, Mitarbeiter,Administrator")]
     public class OccupanciesController : Controller
     {
         private readonly AppDbContext _context;
