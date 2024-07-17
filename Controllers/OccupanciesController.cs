@@ -55,11 +55,12 @@ namespace Deskbuddy.Controllers
         }
 
         // GET: Occupancies/Create
-        [Authorize(Roles = "Sekretariat")]
+        [Authorize(Roles = "Sekretariat, Administrator")]
         public IActionResult Create()
         {
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name");
+            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type");
             return View();
         }
 
@@ -68,7 +69,7 @@ namespace Deskbuddy.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoomId,EmployeeId,Date,Features")] Occupancy occupancy)
+        public async Task<IActionResult> Create([Bind("Id,RoomId,EmployeeId,Date,Type")] Occupancy occupancy)
         {
             if (ModelState.IsValid)
             {
@@ -78,9 +79,10 @@ namespace Deskbuddy.Controllers
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
+            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
         }
-        [Authorize(Roles ="Sekretariat, Mitarbeiter")]
+        [Authorize(Roles ="Sekretariat, Worker")]
         // GET: Occupancies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -103,7 +105,7 @@ namespace Deskbuddy.Controllers
                 return NotFound();
             }
 
-            if (User.IsInRole("Mitarbeiter"))
+            if (User.IsInRole("Worker"))
             {
 
                 // Check if the current user can edit the specified occupancy
@@ -230,7 +232,7 @@ namespace Deskbuddy.Controllers
                 Occupancies = occupancies
             };
 
-            return View("WeeklyOccupancyViewModel", viewModel);
+            return View("WeeklyOccupancy", viewModel);
         }
     }
 }
