@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Deskbuddy.Controllers
 {
-    [Authorize(Roles ="Office, Abteilungsleiter, Mitarbeiter,Administrator")]
+    [Authorize(Roles ="Office, Chief, Worker,Administrator")]
     public class OccupanciesController : Controller
     {
         private readonly AppDbContext _context;
@@ -55,9 +55,10 @@ namespace Deskbuddy.Controllers
         }
 
         // GET: Occupancies/Create
-        [Authorize(Roles = "Sekretariat, Administrator")]
+        [Authorize(Roles = "Office, Worker, Administrator")]
         public IActionResult Create()
         {
+
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name");
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name");
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type");
@@ -71,6 +72,16 @@ namespace Deskbuddy.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,RoomId,EmployeeId,Date,Type")] Occupancy occupancy)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            occupancy.UserId = currentUser.Id;
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(occupancy);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(occupancy);
@@ -82,7 +93,7 @@ namespace Deskbuddy.Controllers
             ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
         }
-        [Authorize(Roles ="Sekretariat, Worker")]
+        [Authorize(Roles ="Office, Worker")]
         // GET: Occupancies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -98,29 +109,20 @@ namespace Deskbuddy.Controllers
             }
 
             var currentUser = await _userManager.GetUserAsync(User);
-            var existingOccupancy = await _context.Occupancies.FindAsync(id);
-
-            if (existingOccupancy == null)
-            {
-                return NotFound();
-            }
 
             if (User.IsInRole("Worker"))
             {
-
                 // Check if the current user can edit the specified occupancy
-                if (existingOccupancy.UserId != currentUser.Id)
+                if (occupancy.UserId != currentUser.Id)
                 {
                     // If the current user is not allowed to edit this occupancy, return an unauthorized view or handle accordingly
                     return Forbid();
                 }
-
-                // If the current user is allowed to edit, proceed to show the edit view
-                return View(existingOccupancy);
             }
 
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
+            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
         }
 
@@ -142,6 +144,11 @@ namespace Deskbuddy.Controllers
             if (existingOccupancy == null)
             {
                 return NotFound();
+            }
+
+            if (User.IsInRole("Worker") && existingOccupancy.UserId != currentUser.Id)
+            {
+                return Forbid();
             }
 
 
@@ -167,11 +174,12 @@ namespace Deskbuddy.Controllers
             }
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "Name", occupancy.EmployeeId);
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Name", occupancy.RoomId);
+            ViewData["RoomType"] = new SelectList(_context.Rooms, "Id", "Type", occupancy.RoomId);
             return View(occupancy);
         }
 
         // GET: Occupancies/Delete/5
-        [Authorize(Roles = "Sektretariat")]
+        [Authorize(Roles = "Office, Worker")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -187,6 +195,12 @@ namespace Deskbuddy.Controllers
             {
                 return NotFound();
             }
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
+            {
+                return Forbid();
+            }
 
             return View(occupancy);
         }
@@ -194,14 +208,23 @@ namespace Deskbuddy.Controllers
         // POST: Occupancies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Office, Worker")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var occupancy = await _context.Occupancies.FindAsync(id);
-            if (occupancy != null)
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (occupancy == null)
             {
-                _context.Occupancies.Remove(occupancy);
+                return NotFound();
             }
 
+            if (User.IsInRole("Worker") && occupancy.UserId != currentUser.Id)
+            {
+                return Forbid();
+            }
+
+            _context.Occupancies.Remove(occupancy);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
