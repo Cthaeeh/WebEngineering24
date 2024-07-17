@@ -43,6 +43,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .WithMany(w => w.Equipment)
             .HasForeignKey(e => e.WorkspaceId);
 
+        // Configure the Occupancy - Room relationship
         builder.Entity<Occupancy>()
             .HasOne(o => o.Room)
             .WithMany(w => w.Occupancies)
@@ -124,26 +125,5 @@ public class AppDbContext : IdentityDbContext<AppUser>
     }
 
     builder.Entity<Equipment>().HasData(equipmentList);
-
-    // Seeding data for Employees
-        string[] vorname = new string[] { "Anton", "Bernd", "Clara", "Dieter", "Eva", "Friedrich", "Greta", "Heinz", "Ingrid", "Johann" };
-        string[] nachname = new string[] { "Meier", "Schmidt", "Fischer", "Weber", "Müller", "Bauer", "Richter", "Koch", "Wagner", "Becker" };
-        Random rnd = new Random();
-
-        for (int i = 0; i < 123; i++)
-        {
-            string vn = vorname[rnd.Next(vorname.Length)];
-            string nn = nachname[rnd.Next(nachname.Length)];
-            int departmentId = rnd.Next(1, 6); // Assuming there are 5 departments
-
-            builder.Entity<Employee>().HasData(new Employee
-            {
-                Id = i + 1,
-                Name = vn + " " + nn,
-                DepartmentId = departmentId
-            });
-        }
     }
-
-    
 }
