@@ -16,5 +16,6 @@ namespace MyWebDbApp.Models
 
         [ForeignKey("DepartmentId")]
         public Department? Department { get; set; }
+
     }
 }

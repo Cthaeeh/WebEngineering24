@@ -12,7 +12,8 @@ namespace MyWebDbApp.Models
             Kitchen,
             Assembly,
             Ballroom,
-            Laboratory
+            Laboratory,
+            Remote
         }
         public int Id { get; set; }
         

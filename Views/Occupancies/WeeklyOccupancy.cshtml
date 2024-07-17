@@ -8,7 +8,7 @@
             <th>Date</th>
             <th>Room</th>
             <th>Employee</th>
-            <th>Features</th>
+            <th>RoomType</th>
             <!-- Add other columns as needed -->
         </tr>
     </thead>
@@ -19,6 +19,7 @@
                 <td>@occupancy.Date.ToString("dd.MM.yyyy")</td>
                 <td>@occupancy.Room.Name</td>
                 <td>@(occupancy.Employee != null ? occupancy.Employee.Name : "Free to book")</td>
+                <td>@occupancy.Room.Type</td>
                 <!-- Add other columns as needed -->
             </tr>
         }

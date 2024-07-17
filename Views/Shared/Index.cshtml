@@ -1,0 +1,73 @@
+﻿@model List<MyWebDbApp.Models.RoomUtilizationViewModel>
+
+<h2>Room Utilization Analysis</h2>
+
+<div id="line_chart_div"></div>
+<div id="bar_chart_div"></div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            drawLineChart();
+            drawBarChart();
+        }
+
+        function drawLineChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'On-Site Count');
+            data.addColumn('number', 'Home Office Count');
+
+            data.addRows([
+        @foreach (var item in Model)
+        {
+            @:['@item.Date.ToShortDateString()', @item.OnSiteCount, @item.HomeOfficeCount],
+        }
+                    ]);
+
+            var options = {
+                title: 'Average Number of Employees On-Site and Home Office per Day',
+                hAxis: {
+                    title: 'Date'
+                },
+                vAxis: {
+                    title: 'Employee Count'
+                }
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('line_chart_div'));
+            chart.draw(data, options);
+        }
+
+        function drawBarChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Room');
+            data.addColumn('number', 'Employee Count');
+
+            data.addRows([
+        @foreach (var item in Model)
+        {
+            @:['Room @item.RoomId', @item.EmployeeCount],
+        }
+                    ]);
+
+            var options = {
+                title: 'Average Utilization of Workstations',
+                hAxis: {
+                    title: 'Room'
+                },
+                vAxis: {
+                    title: 'Employee Count'
+                }
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('bar_chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+}
+

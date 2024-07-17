@@ -50,7 +50,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .WithMany(w => w.Occupancies)
             .HasForeignKey(o => o.RoomId)
             .OnDelete(DeleteBehavior.Restrict);
-
+            
         // Seed Admin User
         AppUser adminUser = new AppUser() { Id = Guid.NewGuid().ToString(), UserName = "admin@abc.com" };
         adminUser.NormalizedUserName = adminUser.UserName.ToUpper();
@@ -122,7 +122,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
         new Room { Id = 7, Name = "Room 7", Type = Room.RoomType.Regular },
         new Room { Id = 8, Name = "Room 8", Type = Room.RoomType.Laboratory },
         new Room { Id = 9, Name = "Room 9", Type = Room.RoomType.Kitchen },
-        new Room { Id = 10, Name = "Room 10", Type = Room.RoomType.Assembly }
+        new Room { Id = 10, Name = "Room 10", Type = Room.RoomType.Assembly },
+        new Room { Id=11, Name = "Homeoffice", Type = Room.RoomType.Remote}
     };
 
         builder.Entity<Room>().HasData(rooms);
