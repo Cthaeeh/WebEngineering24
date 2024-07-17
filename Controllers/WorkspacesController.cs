@@ -20,6 +20,7 @@ namespace MyWebDbApp.Controllers
         }
 
         // GET: Workspaces
+        [Authorize(Roles = "Sekretariat, Administrator")]
         public async Task<IActionResult> Index()
         {
             const int length = 20;
