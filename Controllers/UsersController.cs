@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWebDbApp.Areas.Identity.Data;
 using MyWebDbApp.Data;
-using MyWebDbApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyWebDbApp.Controllers
 {
+    [Authorize(Roles ="Administrator")]
     public class UsersController : Controller
     {
         private readonly AppDbContext _context;
